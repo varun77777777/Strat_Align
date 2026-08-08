@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- SEO -->
+  <title>StratAlign — Strategic Alignment Platform</title>
+  <meta name="description" content="A premium glassmorphism UI design system for StratAlign. Dark-themed, animated, and fully responsive." />
+  <meta name="keywords" content="strategy, alignment, okr, goals, glassmorphism, dashboard" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="StratAlign — Strategic Alignment Platform" />
+  <meta property="og:description" content="A premium glassmorphism dashboard UI design system." />
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="./styles/variables.css" />
+  <link rel="stylesheet" href="./styles/global.css" />
+  <link rel="stylesheet" href="./styles/animations.css" />
+  <link rel="stylesheet" href="./styles/components.css" />
+  <link rel="stylesheet" href="./styles/utilities.css" />
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════════════ -->
+  <header role="banner">
+    <nav id="main-navbar" class="glass-navbar" aria-label="Main navigation">
+
+      <!-- Brand -->
+      <a href="/" class="glass-navbar-brand" aria-label="StratAlign home">
+        <div class="icon-box icon-box-sm icon-box-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        StratAlign
+      </a>
+
+      <!-- Nav links -->
+      <ul id="nav-links" class="glass-navbar-nav ml-8" role="list">
+        <li><a href="#" class="glass-navbar-link active" id="nav-dashboard" aria-current="page">Dashboard</a></li>
+        <li><a href="#" class="glass-navbar-link" id="nav-goals">Goals</a></li>
+        <li><a href="#" class="glass-navbar-link" id="nav-teams">Teams</a></li>
+        <li><a href="#" class="glass-navbar-link" id="nav-reports">Reports</a></li>
+        <li><a href="#" class="glass-navbar-link" id="nav-settings">Settings</a></li>
+      </ul>
+
+      <!-- Actions -->
+      <div class="glass-navbar-actions" role="group" aria-label="User actions">
+        <span class="live-dot text-xs text-muted" aria-label="System live">Live</span>
+
+        <button id="btn-notifications" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </button>
+
+        <button id="btn-new-goal" class="glass-button-primary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Goal
+        </button>
+
+        <div id="user-avatar" class="avatar avatar-md" aria-label="User menu" role="button" tabindex="0">SA</div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════
+       MAIN LAYOUT
+  ══════════════════════════════════════════════════════ -->
+  <main id="main-content" role="main">
+    <div class="container py-10">
+
+      <!-- Page header -->
+      <div class="flex items-center justify-between mb-8 animate-fade-in-down">
+        <div>
+          <h1 class="text-gradient-primary mb-2">Strategic Dashboard</h1>
+          <p class="text-muted text-sm">Q3 2026 · All teams · <span class="text-success">On track</span></p>
+        </div>
+        <div class="flex gap-3">
+          <button id="btn-filter" class="glass-button-secondary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+            Filter
+          </button>
+          <button id="btn-export" class="glass-button-secondary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STAT CARDS ── -->
+      <div class="grid-4 mb-8" role="region" aria-label="Key metrics">
+
+        <article class="glass-card glass-card-primary animate-slide-up delay-0" aria-labelledby="stat-goals-label">
+          <div class="flex items-center justify-between mb-4">
+            <div class="icon-box icon-box-primary">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <span class="badge badge-success badge-dot">Active</span>
+          </div>
+          <div class="stat-card">
+            <span id="stat-goals-label" class="stat-label">Total Goals</span>
+            <span class="stat-value">148</span>
+            <span class="stat-delta stat-delta-up">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 16H4z"/></svg>
+              +12 this quarter
+            </span>
+          </div>
+        </article>
+
+        <article class="glass-card glass-card-success animate-slide-up delay-100" aria-labelledby="stat-completed-label">
+          <div class="flex items-center justify-between mb-4">
+            <div class="icon-box icon-box-success">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="badge badge-success">78%</span>
+          </div>
+          <div class="stat-card">
+            <span id="stat-completed-label" class="stat-label">Completed</span>
+            <span class="stat-value text-success">115</span>
+            <span class="stat-delta stat-delta-up">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 16H4z"/></svg>
+              +8% vs last Q
+            </span>
+          </div>
+        </article>
+
+        <article class="glass-card glass-card-warning animate-slide-up delay-200" aria-labelledby="stat-atrisk-label">
+          <div class="flex items-center justify-between mb-4">
+            <div class="icon-box icon-box-warning">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <span class="badge badge-warning">14%</span>
+          </div>
+          <div class="stat-card">
+            <span id="stat-atrisk-label" class="stat-label">At Risk</span>
+            <span class="stat-value text-warning">21</span>
+            <span class="stat-delta stat-delta-down">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(180deg)"><path d="M12 4l8 16H4z"/></svg>
+              -3 from last week
+            </span>
+          </div>
+        </article>
+
+        <article class="glass-card glass-card-danger animate-slide-up delay-300" aria-labelledby="stat-overdue-label">
+          <div class="flex items-center justify-between mb-4">
+            <div class="icon-box icon-box-danger">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <span class="badge badge-danger">8%</span>
+          </div>
+          <div class="stat-card">
+            <span id="stat-overdue-label" class="stat-label">Overdue</span>
+            <span class="stat-value text-danger">12</span>
+            <span class="stat-delta stat-delta-down">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="transform:rotate(180deg)"><path d="M12 4l8 16H4z"/></svg>
+              Needs attention
+            </span>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ── TABS ── -->
+      <div class="tabs mb-8 animate-fade-in delay-200" role="tablist" aria-label="Dashboard views" style="max-width:440px;">
+        <button id="tab-overview"  class="tab active" role="tab" aria-selected="true"  aria-controls="panel-overview">Overview</button>
+        <button id="tab-teams"     class="tab"         role="tab" aria-selected="false" aria-controls="panel-teams">Teams</button>
+        <button id="tab-timeline"  class="tab"         role="tab" aria-selected="false" aria-controls="panel-timeline">Timeline</button>
+      </div>
+
+      <!-- ── MAIN CONTENT GRID ── -->
+      <div class="grid-3 mb-8 animate-fade-in-up delay-300" style="grid-template-columns: 1fr 1fr 1fr;">
+
+        <!-- Goal progress card -->
+        <div class="glass-card-lg" style="grid-column: span 2;" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold">Goal Progress</h2>
+            <span class="badge badge-info">Q3 2026</span>
+          </div>
+
+          <ul class="flex-col gap-5" style="list-style:none;padding:0;display:flex;" aria-label="Goal progress list">
+            <li>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium">Product Roadmap</span>
+                <span class="text-success text-sm font-semibold">87%</span>
+              </div>
+              <div class="progress-track"><div class="progress-bar progress-bar-success" style="width:87%" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </li>
+            <li>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium">Revenue Growth</span>
+                <span class="text-info text-sm font-semibold">64%</span>
+              </div>
+              <div class="progress-track"><div class="progress-bar" style="width:64%" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </li>
+            <li>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium">Customer NPS</span>
+                <span class="text-warning text-sm font-semibold">42%</span>
+              </div>
+              <div class="progress-track"><div class="progress-bar progress-bar-warning" style="width:42%" role="progressbar" aria-valuenow="42" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </li>
+            <li>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium">Team Engagement</span>
+                <span class="text-danger text-sm font-semibold">28%</span>
+              </div>
+              <div class="progress-track"><div class="progress-bar progress-bar-danger" style="width:28%" role="progressbar" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Team leaderboard -->
+        <div class="glass-card">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-md font-semibold">Top Teams</h2>
+            <button id="btn-view-all-teams" class="glass-button-ghost btn-xs">View all</button>
+          </div>
+          <ul class="flex-col gap-3" style="list-style:none;padding:0;display:flex;" aria-label="Top performing teams">
+            <li class="flex items-center gap-3">
+              <div class="avatar avatar-sm" style="background:var(--gradient-primary);">P</div>
+              <div class="flex-1">
+                <div class="text-sm font-medium">Product</div>
+                <div class="text-xs text-muted">12 goals</div>
+              </div>
+              <span class="badge badge-success">92%</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="avatar avatar-sm" style="background:var(--gradient-secondary);">E</div>
+              <div class="flex-1">
+                <div class="text-sm font-medium">Engineering</div>
+                <div class="text-xs text-muted">18 goals</div>
+              </div>
+              <span class="badge badge-success">85%</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="avatar avatar-sm" style="background:var(--gradient-accent);">D</div>
+              <div class="flex-1">
+                <div class="text-sm font-medium">Design</div>
+                <div class="text-xs text-muted">9 goals</div>
+              </div>
+              <span class="badge badge-warning">63%</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="avatar avatar-sm" style="background:var(--gradient-purple);">M</div>
+              <div class="flex-1">
+                <div class="text-sm font-medium">Marketing</div>
+                <div class="text-xs text-muted">15 goals</div>
+              </div>
+              <span class="badge badge-warning">51%</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- ── FORM DEMO ── -->
+      <div class="glass-card-lg mb-8 animate-fade-in-up delay-400">
+        <h2 class="text-xl font-semibold mb-6">Create New Goal</h2>
+        <form id="new-goal-form" novalidate aria-label="New goal form">
+          <div class="grid-2 mb-5" style="grid-template-columns:1fr 1fr;">
+            <div class="form-field">
+              <label class="input-label" for="goal-title">Goal Title</label>
+              <div class="input-group">
+                <svg class="input-icon-left" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <input id="goal-title" type="text" class="glass-input has-icon-left" placeholder="e.g. Increase NPS by 20 points" aria-required="true" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="input-label" for="goal-owner">Owner</label>
+              <select id="goal-owner" class="glass-input glass-select" aria-required="true">
+                <option value="" disabled selected>Select owner</option>
+                <option value="product">Product Team</option>
+                <option value="engineering">Engineering Team</option>
+                <option value="design">Design Team</option>
+                <option value="marketing">Marketing Team</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field mb-5">
+            <label class="input-label" for="goal-description">Description</label>
+            <textarea id="goal-description" class="glass-input glass-textarea" rows="3" placeholder="Describe what success looks like…"></textarea>
+          </div>
+          <div class="grid-3 mb-6" style="grid-template-columns:1fr 1fr 1fr;">
+            <div class="form-field">
+              <label class="input-label" for="goal-status">Status</label>
+              <select id="goal-status" class="glass-input glass-select">
+                <option value="on-track">On Track</option>
+                <option value="at-risk">At Risk</option>
+                <option value="behind">Behind</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="input-label" for="goal-priority">Priority</label>
+              <select id="goal-priority" class="glass-input glass-select">
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="input-label" for="goal-due">Due Date</label>
+              <input id="goal-due" type="date" class="glass-input" aria-label="Goal due date" />
+            </div>
+          </div>
+          <div class="flex gap-3">
+            <button id="btn-create-goal" type="submit" class="glass-button-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Create Goal
+            </button>
+            <button id="btn-save-draft" type="button" class="glass-button-secondary">Save Draft</button>
+            <button id="btn-cancel-goal" type="button" class="glass-button-ghost">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ── GOALS TABLE ── -->
+      <section class="animate-fade-in-up delay-500" aria-labelledby="goals-table-heading">
+        <div class="flex items-center justify-between mb-4">
+          <h2 id="goals-table-heading" class="text-xl font-semibold">Recent Goals</h2>
+          <div class="flex gap-2">
+            <div class="input-group" style="width:220px;">
+              <svg class="input-icon-left" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input id="goals-search" type="search" class="glass-input has-icon-left" placeholder="Search goals…" aria-label="Search goals" />
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-table-wrap">
+          <table id="goals-table" class="glass-table" aria-label="Goals table">
+            <thead>
+              <tr>
+                <th scope="col">Goal</th>
+                <th scope="col">Team</th>
+                <th scope="col">Status</th>
+                <th scope="col">Progress</th>
+                <th scope="col">Due</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="font-medium text-primary">Increase NPS Score</span><br><span class="text-xs text-muted">Customer Experience</span></td>
+                <td><div class="flex items-center gap-2"><div class="avatar avatar-xs" style="background:var(--gradient-primary)">P</div><span>Product</span></div></td>
+                <td><span class="badge badge-success badge-dot">On Track</span></td>
+                <td><div style="min-width:80px;"><div class="progress-track progress-track-sm"><div class="progress-bar progress-bar-success" style="width:87%"></div></div><span class="text-xs text-muted mt-1 block">87%</span></div></td>
+                <td><span class="text-sm">Sep 30</span></td>
+                <td>
+                  <div class="flex gap-2">
+                    <button id="btn-edit-goal-1" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Edit goal">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button id="btn-delete-goal-1" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Delete goal">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="font-medium text-primary">Q3 Revenue Target</span><br><span class="text-xs text-muted">Finance</span></td>
+                <td><div class="flex items-center gap-2"><div class="avatar avatar-xs" style="background:var(--gradient-accent)">M</div><span>Marketing</span></div></td>
+                <td><span class="badge badge-warning badge-dot">At Risk</span></td>
+                <td><div style="min-width:80px;"><div class="progress-track progress-track-sm"><div class="progress-bar progress-bar-warning" style="width:42%"></div></div><span class="text-xs text-muted mt-1 block">42%</span></div></td>
+                <td><span class="text-sm">Sep 30</span></td>
+                <td>
+                  <div class="flex gap-2">
+                    <button id="btn-edit-goal-2" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Edit goal">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button id="btn-delete-goal-2" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Delete goal">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="font-medium text-primary">API Performance SLA</span><br><span class="text-xs text-muted">Engineering</span></td>
+                <td><div class="flex items-center gap-2"><div class="avatar avatar-xs" style="background:var(--gradient-secondary)">E</div><span>Engineering</span></div></td>
+                <td><span class="badge badge-danger badge-dot">Overdue</span></td>
+                <td><div style="min-width:80px;"><div class="progress-track progress-track-sm"><div class="progress-bar progress-bar-danger" style="width:18%"></div></div><span class="text-xs text-muted mt-1 block">18%</span></div></td>
+                <td><span class="text-sm text-danger">Aug 01</span></td>
+                <td>
+                  <div class="flex gap-2">
+                    <button id="btn-edit-goal-3" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Edit goal">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                    <button id="btn-delete-goal-3" class="glass-button-ghost btn-icon btn-icon-sm" aria-label="Delete goal">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── ALERTS DEMO ── -->
+      <section class="mt-10 flex-col gap-4 animate-fade-in delay-500" style="display:flex;" aria-label="Sample alerts">
+        <div class="alert alert-success" role="alert">
+          <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          <div><div class="alert-title">Goal Achieved!</div><div class="alert-body">Product NPS goal surpassed with 92% completion rate.</div></div>
+        </div>
+        <div class="alert alert-warning" role="alert">
+          <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><div class="alert-title">At Risk</div><div class="alert-body">Revenue target is 21 days behind schedule. Review recommended.</div></div>
+        </div>
+        <div class="alert alert-danger" role="alert">
+          <svg class="alert-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          <div><div class="alert-title">Overdue</div><div class="alert-body">API performance SLA has been exceeded. Escalation required immediately.</div></div>
+        </div>
+      </section>
+
+      <!-- ── SKELETON DEMO ── -->
+      <section class="glass-card mt-10 animate-fade-in delay-600" aria-label="Loading state demo" aria-busy="true">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="skeleton skeleton-avatar"></div>
+          <div class="flex-1">
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-text" style="width:40%"></div>
+          </div>
+        </div>
+        <div class="skeleton skeleton-text mb-3"></div>
+        <div class="skeleton skeleton-text" style="width:80%"></div>
+        <div class="skeleton skeleton-text" style="width:60%"></div>
+        <div class="flex gap-3 mt-5">
+          <div class="skeleton skeleton-button"></div>
+          <div class="skeleton skeleton-button"></div>
+        </div>
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- ══════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer role="contentinfo" class="border-t py-8 mt-16">
+    <div class="container flex items-center justify-between flex-wrap gap-4">
+      <div class="flex items-center gap-3">
+        <span class="font-display font-bold text-primary">StratAlign</span>
+        <span class="divider-vertical" aria-hidden="true"></span>
+        <span class="text-xs text-muted">Design System v1.0</span>
+      </div>
+      <p class="text-xs text-muted">&copy; 2026 StratAlign. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════════════
+       INLINE SCRIPTS (minimal, no framework)
+  ══════════════════════════════════════════════════════ -->
+  <script>
+    /* Navbar scroll effect */
+    const navbar = document.getElementById('main-navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('glass-navbar-scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    /* Tab switching */
+    const tabs = document.querySelectorAll('[role="tab"]');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      });
+    });
+
+    /* Form submit demo */
+    document.getElementById('new-goal-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-create-goal');
+      btn.classList.add('btn-loading');
+      btn.innerHTML = '<span class="spinner spinner-sm spinner-white"></span><span class="btn-text">Creating…</span>';
+      setTimeout(() => {
+        btn.classList.remove('btn-loading');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Goal';
+      }, 2000);
+    });
+
+    /* Stagger reveal on scroll */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'none';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('[class*="animate-"]').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+/* ============================================================
+   VARIABLES.CSS — CSS Custom Properties (Design Tokens)
+   StrategicAlign Design System v1.0
+   ============================================================ */
+
+:root {
+
+  /* ─── BRAND COLORS ───────────────────────────────────────── */
+  --color-brand-primary:       #6C63FF;
+  --color-brand-secondary:     #00D4FF;
+  --color-brand-accent:        #FF6B9D;
+  --color-brand-tertiary:      #43E97B;
+  --color-brand-warning:       #FFB347;
+  --color-brand-danger:        #FF5252;
+
+  /* ─── BACKGROUND LAYERS ──────────────────────────────────── */
+  --bg-base:        #050B1A;
+  --bg-layer-1:     #0A1428;
+  --bg-layer-2:     #0F1E3A;
+  --bg-layer-3:     #162344;
+
+  /* ─── GRADIENT DEFINITIONS ───────────────────────────────── */
+  --gradient-base:          linear-gradient(135deg, #050B1A 0%, #0A1428 40%, #0D1B38 100%);
+  --gradient-primary:       linear-gradient(135deg, #6C63FF 0%, #00D4FF 100%);
+  --gradient-secondary:     linear-gradient(135deg, #00D4FF 0%, #43E97B 100%);
+  --gradient-accent:        linear-gradient(135deg, #FF6B9D 0%, #FF8E53 100%);
+  --gradient-danger:        linear-gradient(135deg, #FF5252 0%, #FF1744 100%);
+  --gradient-warning:       linear-gradient(135deg, #FFB347 0%, #FFCC02 100%);
+  --gradient-success:       linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
+  --gradient-purple:        linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+  --gradient-cosmic:        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  --gradient-aurora:        linear-gradient(135deg, #6C63FF 0%, #FF6B9D 50%, #00D4FF 100%);
+
+  /* ─── TEXT COLORS ────────────────────────────────────────── */
+  --text-primary:   #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.75);
+  --text-muted:     rgba(255, 255, 255, 0.45);
+  --text-disabled:  rgba(255, 255, 255, 0.25);
+  --text-inverse:   #050B1A;
+  --text-brand:     #6C63FF;
+  --text-success:   #43E97B;
+  --text-warning:   #FFB347;
+  --text-danger:    #FF5252;
+  --text-info:      #00D4FF;
+
+  /* ─── GLASS SURFACE TOKENS ───────────────────────────────── */
+  --glass-bg:              rgba(255, 255, 255, 0.05);
+  --glass-bg-sm:           rgba(255, 255, 255, 0.03);
+  --glass-bg-lg:           rgba(255, 255, 255, 0.08);
+  --glass-bg-hover:        rgba(255, 255, 255, 0.10);
+  --glass-border:          rgba(255, 255, 255, 0.12);
+  --glass-border-strong:   rgba(255, 255, 255, 0.22);
+  --glass-border-subtle:   rgba(255, 255, 255, 0.06);
+  --glass-blur:            blur(20px);
+  --glass-blur-sm:         blur(10px);
+  --glass-blur-lg:         blur(40px);
+
+  /* ─── STATUS COLORS ──────────────────────────────────────── */
+  --color-success:         #43E97B;
+  --color-success-bg:      rgba(67, 233, 123, 0.12);
+  --color-success-border:  rgba(67, 233, 123, 0.30);
+
+  --color-warning:         #FFB347;
+  --color-warning-bg:      rgba(255, 179, 71, 0.12);
+  --color-warning-border:  rgba(255, 179, 71, 0.30);
+
+  --color-danger:          #FF5252;
+  --color-danger-bg:       rgba(255, 82, 82, 0.12);
+  --color-danger-border:   rgba(255, 82, 82, 0.30);
+
+  --color-info:            #00D4FF;
+  --color-info-bg:         rgba(0, 212, 255, 0.12);
+  --color-info-border:     rgba(0, 212, 255, 0.30);
+
+  /* ─── SPACING SCALE (8px base) ───────────────────────────── */
+  --space-0:   0px;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-7:   28px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-14:  56px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-24:  96px;
+  --space-32: 128px;
+  --space-40: 160px;
+
+  /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+  --font-family-base:    'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-family-display: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-family-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  --font-size-2xs:  0.625rem;
+  --font-size-xs:   0.75rem;
+  --font-size-sm:   0.875rem;
+  --font-size-base: 1rem;
+  --font-size-md:   1.125rem;
+  --font-size-lg:   1.25rem;
+  --font-size-xl:   1.5rem;
+  --font-size-2xl:  1.875rem;
+  --font-size-3xl:  2.25rem;
+  --font-size-4xl:  3rem;
+  --font-size-5xl:  3.75rem;
+  --font-size-6xl:  4.5rem;
+
+  --font-weight-thin:       100;
+  --font-weight-light:      300;
+  --font-weight-regular:    400;
+  --font-weight-medium:     500;
+  --font-weight-semibold:   600;
+  --font-weight-bold:       700;
+  --font-weight-extrabold:  800;
+  --font-weight-black:      900;
+
+  --line-height-tight:   1.2;
+  --line-height-snug:    1.375;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.75;
+  --line-height-loose:   2;
+
+  --letter-spacing-tight:  -0.025em;
+  --letter-spacing-normal:  0em;
+  --letter-spacing-wide:    0.025em;
+  --letter-spacing-wider:   0.05em;
+  --letter-spacing-widest:  0.1em;
+
+  /* ─── BORDER RADIUS ──────────────────────────────────────── */
+  --radius-none: 0px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  20px;
+  --radius-3xl:  28px;
+  --radius-4xl:  36px;
+  --radius-full: 9999px;
+
+  /* ─── SHADOW SYSTEM ──────────────────────────────────────── */
+  --shadow-sm:    0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md:    0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:    0 8px 32px rgba(0,0,0,0.6);
+  --shadow-xl:    0 16px 56px rgba(0,0,0,0.7);
+  --shadow-2xl:   0 24px 80px rgba(0,0,0,0.8);
+
+  --shadow-primary: 0 8px 32px rgba(108,99,255,0.30);
+  --shadow-accent:  0 8px 32px rgba(255,107,157,0.30);
+  --shadow-success: 0 8px 32px rgba(67,233,123,0.30);
+  --shadow-danger:  0 8px 32px rgba(255,82,82,0.30);
+  --shadow-info:    0 8px 32px rgba(0,212,255,0.30);
+  --shadow-warning: 0 8px 32px rgba(255,179,71,0.30);
+
+  --shadow-glow-primary: 0 0 20px rgba(108,99,255,0.50), 0 0 40px rgba(108,99,255,0.25);
+  --shadow-glow-accent:  0 0 20px rgba(255,107,157,0.50), 0 0 40px rgba(255,107,157,0.25);
+  --shadow-glow-info:    0 0 20px rgba(0,212,255,0.50),   0 0 40px rgba(0,212,255,0.25);
+  --shadow-glow-success: 0 0 20px rgba(67,233,123,0.50),  0 0 40px rgba(67,233,123,0.25);
+
+  /* ─── ANIMATION EASING ───────────────────────────────────── */
+  --ease-linear:   linear;
+  --ease-in:       cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-bounce:   cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  --ease-smooth:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --duration-instant:  50ms;
+  --duration-fast:    100ms;
+  --duration-base:    200ms;
+  --duration-slow:    300ms;
+  --duration-slower:  500ms;
+  --duration-slowest: 800ms;
+
+  --transition-base:   all var(--duration-base) var(--ease-in-out);
+  --transition-fast:   all var(--duration-fast) var(--ease-out);
+  --transition-slow:   all var(--duration-slow) var(--ease-in-out);
+  --transition-spring: all var(--duration-slow) var(--ease-spring);
+  --transition-color:  color var(--duration-base) var(--ease-in-out),
+                       background-color var(--duration-base) var(--ease-in-out),
+                       border-color var(--duration-base) var(--ease-in-out),
+                       box-shadow var(--duration-base) var(--ease-in-out);
+
+  /* ─── Z-INDEX SCALE ──────────────────────────────────────── */
+  --z-below:    -1;
+  --z-base:      0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+  --z-tooltip:  600;
+
+  /* ─── LAYOUT ─────────────────────────────────────────────── */
+  --container-max:   1280px;
+  --container-prose:  720px;
+  --navbar-height:     64px;
+  --sidebar-width:    260px;
+}
