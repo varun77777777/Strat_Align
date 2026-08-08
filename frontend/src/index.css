@@ -522,6 +522,8 @@ body {
   align-items: center;
   flex: 1;
   position: relative;
+  height: 100%;
+  justify-content: flex-end;
 }
 
 .forecast-bar-fill {
@@ -846,4 +848,226 @@ body {
     display: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   SKELETON LOADERS
+═══════════════════════════════════════════════════════ */
+@keyframes shimmer {
+  0%   { background-position: -700px 0; }
+  100% { background-position: 700px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 25%,
+    rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.04) 75%
+  );
+  background-size: 700px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 8px;
+  height: 14px;
+}
+
+.skeleton-title  { height: 14px; }
+.skeleton-value  { height: 36px; border-radius: 10px; }
+.skeleton-sub    { height: 12px; }
+
+.skeleton-chart {
+  height: 180px;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.03) 25%,
+    rgba(255,255,255,0.07) 50%,
+    rgba(255,255,255,0.03) 75%
+  );
+  background-size: 700px 100%;
+  animation: shimmer 1.8s infinite linear;
+  margin-top: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST NOTIFICATION
+═══════════════════════════════════════════════════════ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  border: 1px solid;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 360px;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+.toast-close:hover { opacity: 1; }
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   EXPORT BUTTON
+═══════════════════════════════════════════════════════ */
+.export-btn {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+  border: 1px solid rgba(102, 126, 234, 0.35);
+  color: #a78bfa;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  min-height: 36px;
+}
+
+.export-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.25) 0%, rgba(118, 75, 162, 0.25) 100%);
+  border-color: rgba(102, 126, 234, 0.6);
+  color: #c4b5fd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
+}
+
+.export-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — 768px
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #root {
+    padding: 0 12px 32px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .kpi-value {
+    font-size: 26px;
+  }
+
+  .kpi-title {
+    font-size: 12px;
+  }
+
+  .section-title {
+    font-size: 15px;
+  }
+
+  .glass-navbar {
+    padding: 14px 16px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nav-logo {
+    font-size: 16px;
+  }
+
+  .export-btn {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+
+  .heatmap-row {
+    grid-template-columns: 120px 1fr 60px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — 480px
+═══════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .kpi-value {
+    font-size: 22px;
+  }
+
+  .glass-card {
+    padding: 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+  }
+
+  button,
+  .apply-btn,
+  .export-btn {
+    min-height: 44px;
+  }
+
+  .dashboard-layout {
+    gap: 12px;
+  }
+
+  .toast {
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    max-width: unset;
+  }
+
+  .heatmap-row {
+    grid-template-columns: 1fr 60px;
+    gap: 8px;
+  }
+
+  .team-leader {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   HISTOGRAM CHART CONTAINER
+═══════════════════════════════════════════════════════ */
+.histogram-container {
+  height: 220px;
+  position: relative;
+  width: 100%;
+}
+
 

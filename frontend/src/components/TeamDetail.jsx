@@ -70,7 +70,6 @@ const TeamDetail = () => {
         // Update local state immediately
         setTeam(prev => {
           if (!prev) return prev;
-          const updatedRecs = prev.projects || []; // Safe fallback
           const newRecs = (prev.prediction?.recommendations || []).map(r => 
             (r._id === id || r.id === id) ? { ...r, applied: true, appliedAt: new Date() } : r
           );

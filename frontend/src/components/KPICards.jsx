@@ -1,31 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const KPICards = ({ teams = [], predictions = [], recommendations = [] }) => {
   // 1. Overall Alignment %
-  const avgAlignment = teams.length
+  const avgAlignment = teams.length > 0
     ? Math.round(teams.reduce((acc, t) => acc + (t.alignmentScore || 0), 0) / teams.length)
     : 0;
 
-  // Calculate alignment trend delta
-  // Let's compute average from historical alignment if we have it or use a default positive trend indicator
+  // 2. Alignment trend delta (improving vs declining, no fake +1 bias)
   const improvingCount = teams.filter(t => t.trend === 'improving').length;
   const decliningCount = teams.filter(t => t.trend === 'declining').length;
-  const alignmentTrendText = improvingCount >= decliningCount 
-    ? `+${improvingCount - decliningCount + 1}% vs last week`
-    : `-${decliningCount - improvingCount}% vs last week`;
-  const isTrendUp = improvingCount >= decliningCount;
+  const deltaPercent = teams.length > 0
+    ? Math.round(((improvingCount - decliningCount) / teams.length) * 100)
+    : 0;
+  const isTrendUp = deltaPercent >= 0;
+  const alignmentTrendText = isTrendUp
+    ? `+${deltaPercent}% vs last week`
+    : `${deltaPercent}% vs last week`;
 
-  // 2. At-Risk Teams
-  const atRiskTeams = teams.filter(t => t.alignmentScore < 60).length;
-  const totalTeams = teams.length || 8;
+  // 3. At-Risk Teams
+  const atRiskTeams = teams.filter(t => (t.alignmentScore ?? 100) < 60).length;
+  const totalTeams = teams.length || 0;
 
-  // 3. Average Risk Score
-  const avgRisk = predictions.length
+  // 4. Average Risk Score from predictions
+  const avgRisk = predictions.length > 0
     ? Math.round(predictions.reduce((acc, p) => acc + (p.riskScore || 0), 0) / predictions.length)
     : 0;
 
-  // 4. Pending Recommendations
-  const pendingRecsCount = recommendations.filter(r => !r.applied).length;
+  // 5. Pending Recommendations (null-safe)
+  const pendingRecsCount = recommendations?.filter(r => r?.applied === false)?.length ?? 0;
 
   return (
     <div className="kpi-grid">
@@ -60,13 +63,16 @@ const KPICards = ({ teams = [], predictions = [], recommendations = [] }) => {
             </svg>
           </div>
         </div>
-        <div className="kpi-value">{atRiskTeams} <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>/ {totalTeams}</span></div>
+        <div className="kpi-value">
+          {atRiskTeams}
+          <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}> / {totalTeams}</span>
+        </div>
         <div className="kpi-footer">
           <span>Target: 0 misaligned teams</span>
         </div>
       </div>
 
-      {/* Average Risk KPI */}
+      {/* Average Risk Score KPI */}
       <div className="glass-card kpi-card">
         <div className="kpi-header">
           <span className="kpi-title">Risk Forecast Index</span>
@@ -101,6 +107,26 @@ const KPICards = ({ teams = [], predictions = [], recommendations = [] }) => {
       </div>
     </div>
   );
+};
+
+KPICards.propTypes = {
+  teams: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    alignmentScore: PropTypes.number,
+    trend: PropTypes.string,
+  })),
+  predictions: PropTypes.arrayOf(PropTypes.shape({
+    riskScore: PropTypes.number,
+  })),
+  recommendations: PropTypes.arrayOf(PropTypes.shape({
+    applied: PropTypes.bool,
+  })),
+};
+
+KPICards.defaultProps = {
+  teams: [],
+  predictions: [],
+  recommendations: [],
 };
 
 export default KPICards;

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import TeamDetail from './pages/TeamDetail';
+import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
 
 function App() {
@@ -9,8 +10,22 @@ function App() {
     <BrowserRouter>
       <div className="app-container">
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/team/:teamId" element={<TeamDetail />} />
+          <Route
+            path="/"
+            element={
+              <ErrorBoundary>
+                <Dashboard />
+              </ErrorBoundary>
+            }
+          />
+          <Route
+            path="/team/:teamId"
+            element={
+              <ErrorBoundary>
+                <TeamDetail />
+              </ErrorBoundary>
+            }
+          />
         </Routes>
       </div>
     </BrowserRouter>
@@ -18,4 +33,3 @@ function App() {
 }
 
 export default App;
-
