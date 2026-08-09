@@ -454,6 +454,315 @@ Critical: 80% of departing talent citie misalignment between their role and IBM'
   },
 ];
 
+// ── Causal Chain + Evidence Data ─────────────────────────────────────────────
+
+const TEAM_CAUSAL_DATA = {
+  'Watson AI': {
+    deviationMetric: 'Healthcare Domain Model delivery velocity',
+    deviationMagnitude: -18,
+    rootCauseSummary: 'Talent attrition in regulated-AI specialists → capability gap → initiative delayed',
+    rootCauseConfidence: 93,
+    forecastRevenueMiss: 12,
+    forecastTimeframeWeeks: 12,
+    counterfactualWithFix: 4,
+    counterfactualWorstCase: 47,
+    causalChain: [
+      { step: 1, cause: 'Q3 hiring freeze for specialized AI roles', effect: 'Two healthcare domain model architects departed without replacement', evidenceType: 'resource', confidence: 95 },
+      { step: 2, cause: 'Capability gap in regulated-AI compliance', effect: 'Healthcare domain model timeline slipped 6 weeks', evidenceType: 'talent', confidence: 92 },
+      { step: 3, cause: 'Delayed healthcare model', effect: 'IBM client pipeline for regulated industry blocked ($340M)', evidenceType: 'resource', confidence: 89 },
+    ],
+    evidenceQuotes: [
+      { author: 'Dr. Priya Mehta', role: 'Team Lead', channel: 'slack', date: 'Jul 14, 2026', quote: "We lost two healthcare AI architects last month. HR said no backfill until Q4 due to the hiring freeze. We literally cannot ship the regulated domain models without them.", sentiment: 'negative', tags: ['talent', 'resource', 'hiring'] },
+      { author: 'Raj Patel', role: 'Senior Engineer', channel: 'email', date: 'Jul 22, 2026', quote: "Healthcare compliance validation is taking 3x longer than planned. The team that understands HIPAA AI governance is now at Google. I've escalated twice — no response yet.", sentiment: 'negative', tags: ['talent', 'compliance'] },
+      { author: 'Jennifer Liu', role: 'Product Manager', channel: 'meeting', date: 'Aug 1, 2026', quote: "Banking and healthcare clients are asking about domain models every week. We've had to delay 4 demos this quarter because the models aren't ready. Competitors are filling that gap.", sentiment: 'negative', tags: ['market', 'delivery'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Research Division', communicationFreq: 78, strength: 'strong', type: 'collaboration' },
+      { targetTeam: 'IBM Consulting', communicationFreq: 55, strength: 'moderate', type: 'information' },
+      { targetTeam: 'HR & Talent', communicationFreq: 45, strength: 'moderate', type: 'information' },
+      { targetTeam: 'Enterprise Sales', communicationFreq: 62, strength: 'strong', type: 'information' },
+    ],
+    opinionLeaders: [
+      { name: 'Dr. Priya Mehta', role: 'Team Lead', influenceScore: 88, alignmentBias: 'aligned', reachCount: 34 },
+      { name: 'Raj Patel', role: 'Senior Engineer', influenceScore: 72, alignmentBias: 'aligned', reachCount: 18 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'Accelerate watsonx to 40,000 enterprise clients by FY2025, prioritizing healthcare and banking', receivedMessage: 'Accelerate watsonx to 40,000 enterprise clients by FY2025, prioritizing healthcare and banking', degradationScore: 0 },
+      { level: 1, role: 'SVP of AI Products', originalMessage: 'Accelerate watsonx to 40,000 enterprise clients by FY2025, prioritizing healthcare and banking', receivedMessage: 'Accelerate watsonx adoption — healthcare and banking are key verticals for Q3 targets', degradationScore: 15 },
+      { level: 2, role: 'VP of Watson AI', originalMessage: 'Accelerate watsonx adoption — healthcare and banking are key verticals for Q3 targets', receivedMessage: 'Focus on healthcare domain models but stay mindful of hiring constraints', degradationScore: 45 },
+      { level: 3, role: 'Watson AI Team', originalMessage: 'Focus on healthcare domain models but stay mindful of hiring constraints', receivedMessage: 'Deliver what we can with current team, healthcare is secondary until we get more people', degradationScore: 72 },
+    ],
+    informationSilo: false,
+    siloScore: 18,
+  },
+
+  'Cloud Platform': {
+    deviationMetric: 'Regulated-industry hybrid cloud migration rate',
+    deviationMagnitude: -24,
+    rootCauseSummary: 'Mixed VP messaging → strategy ambiguity → team executing two conflicting cloud mandates',
+    rootCauseConfidence: 87,
+    forecastRevenueMiss: 28,
+    forecastTimeframeWeeks: 12,
+    counterfactualWithFix: 9,
+    counterfactualWorstCase: 95,
+    causalChain: [
+      { step: 1, cause: 'VP Engineering: "Prioritize AWS co-sell partnership" vs VP Cloud: "Prioritize IBM-only deployments"', effect: 'Team received contradictory priorities from two VP sources', evidenceType: 'communication', confidence: 91 },
+      { step: 2, cause: 'Contradictory mandates not resolved for 6 weeks', effect: 'Engineering split resources between AWS integration and IBM Cloud — neither progressed', evidenceType: 'communication', confidence: 88 },
+      { step: 3, cause: 'Regulatory cloud (Financial Services) deprioritized', effect: 'Banking client pipeline stalled — $95M deals blocked pending cloud certification', evidenceType: 'market', confidence: 84 },
+    ],
+    evidenceQuotes: [
+      { author: 'James Okafor', role: 'Team Lead', channel: 'email', date: 'Jul 18, 2026', quote: "We got opposite instructions from two VPs in the same week. Dave said AWS first, Michael said IBM-only. We've been paralyzed waiting for a decision. Six weeks of ambiguity and counting.", sentiment: 'negative', tags: ['communication', 'leadership'] },
+      { author: 'Amir Hassan', role: 'Cloud Architect', channel: 'slack', date: 'Jul 25, 2026', quote: "Financial Services Cloud is 5 weeks behind. We literally don't know if we should be building for multi-cloud or IBM Cloud. I've seen 4 different roadmaps this quarter.", sentiment: 'negative', tags: ['strategy', 'delivery'] },
+      { author: 'Priya Nair', role: 'Product Director', channel: 'meeting', date: 'Aug 3, 2026', quote: "Two banking clients explicitly said they need our regulated cloud certification before they sign. That's $95M sitting there. We need to decide: IBM Cloud or AWS — not both.", sentiment: 'mixed', tags: ['market', 'revenue'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Watson AI', communicationFreq: 58, strength: 'moderate', type: 'collaboration' },
+      { targetTeam: 'Security Division', communicationFreq: 72, strength: 'strong', type: 'collaboration' },
+      { targetTeam: 'Finance & Operations', communicationFreq: 45, strength: 'moderate', type: 'reporting' },
+      { targetTeam: 'Enterprise Sales', communicationFreq: 50, strength: 'moderate', type: 'information' },
+    ],
+    opinionLeaders: [
+      { name: 'James Okafor', role: 'Team Lead', influenceScore: 82, alignmentBias: 'neutral', reachCount: 28 },
+      { name: 'Amir Hassan', role: 'Cloud Architect', influenceScore: 65, alignmentBias: 'misaligned', reachCount: 14 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'Hybrid cloud platform must support 50% enterprise workload migration by 2026 via Red Hat OpenShift', receivedMessage: 'Hybrid cloud platform must support 50% enterprise workload migration by 2026 via Red Hat OpenShift', degradationScore: 0 },
+      { level: 1, role: 'SVP Cloud & Infrastructure', originalMessage: 'Hybrid cloud platform must support 50% enterprise workload migration by 2026 via Red Hat OpenShift', receivedMessage: 'Maximize hybrid cloud partnerships — OpenShift, AWS co-sell, and IBM Cloud all strategic', degradationScore: 28 },
+      { level: 2, role: 'VP Cloud Platform', originalMessage: 'Maximize hybrid cloud partnerships — OpenShift, AWS co-sell, and IBM Cloud all strategic', receivedMessage: 'AWS partnership has highest revenue upside, balance with IBM Cloud requirements', degradationScore: 55 },
+      { level: 3, role: 'Cloud Platform Team', originalMessage: 'AWS partnership has highest revenue upside, balance with IBM Cloud requirements', receivedMessage: 'Not sure whether to build for AWS or IBM Cloud — still waiting for clear direction', degradationScore: 85 },
+    ],
+    informationSilo: false,
+    siloScore: 32,
+  },
+
+  'IBM Consulting': {
+    deviationMetric: 'AI consulting methodology standardization rate',
+    deviationMagnitude: -35,
+    rootCauseSummary: 'Incentive misalignment → consultants optimizing legacy billings over AI transformation deals',
+    rootCauseConfidence: 81,
+    forecastRevenueMiss: 47,
+    forecastTimeframeWeeks: 12,
+    counterfactualWithFix: 14,
+    counterfactualWorstCase: 180,
+    causalChain: [
+      { step: 1, cause: 'Compensation plan: legacy projects pay higher margins than AI transformation deals', effect: 'Consultants prioritize legacy IBM software implementations over watsonx projects', evidenceType: 'incentive', confidence: 89 },
+      { step: 2, cause: 'Low watsonx deal conversion rate (22% vs 45% target)', effect: 'Revenue trajectory $3B below $25B consulting target', evidenceType: 'incentive', confidence: 85 },
+      { step: 3, cause: 'AI consulting methodology not standardized', effect: 'Competing with Accenture/McKinsey without a coherent AI story', evidenceType: 'communication', confidence: 78 },
+    ],
+    evidenceQuotes: [
+      { author: 'Maria Rodriguez', role: 'Team Lead', channel: 'meeting', date: 'Jul 11, 2026', quote: "Our best consultants are still billing on legacy SAP and mainframe projects because margins are 15% higher. Why would they push watsonx when their bonus is tied to billable rate, not strategic product?", sentiment: 'negative', tags: ['incentive', 'compensation'] },
+      { author: 'Tom Bradfield', role: 'Senior Consultant', channel: 'slack', date: 'Jul 29, 2026', quote: "I lost an AI transformation deal to Accenture last week. They had a crisp 10-slide AI methodology. We had... nothing. I told the client we'd get back to them. I never did.", sentiment: 'negative', tags: ['competitive', 'methodology'] },
+      { author: 'Sarah Kim', role: 'Practice Lead', channel: 'email', date: 'Aug 5, 2026', quote: "Only 25% of our consultants have any watsonx training. How are we supposed to compete on AI deals? The training backlog is 8 months long and clients won't wait.", sentiment: 'negative', tags: ['talent', 'training'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Watson AI', communicationFreq: 55, strength: 'moderate', type: 'information' },
+      { targetTeam: 'Enterprise Sales', communicationFreq: 82, strength: 'strong', type: 'collaboration' },
+      { targetTeam: 'HR & Talent', communicationFreq: 38, strength: 'weak', type: 'information' },
+      { targetTeam: 'Finance & Operations', communicationFreq: 42, strength: 'moderate', type: 'reporting' },
+    ],
+    opinionLeaders: [
+      { name: 'Maria Rodriguez', role: 'Team Lead', influenceScore: 79, alignmentBias: 'neutral', reachCount: 45 },
+      { name: 'Tom Bradfield', role: 'Senior Consultant', influenceScore: 71, alignmentBias: 'misaligned', reachCount: 22 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'IBM Consulting must drive AI-powered transformation and reach $25B by 2026 through watsonx deals', receivedMessage: 'IBM Consulting must drive AI-powered transformation and reach $25B by 2026 through watsonx deals', degradationScore: 0 },
+      { level: 1, role: 'SVP Global Business Services', originalMessage: 'IBM Consulting must drive AI-powered transformation and reach $25B by 2026 through watsonx deals', receivedMessage: 'Hit $25B revenue through expanding AI practice while maintaining existing client base', degradationScore: 22 },
+      { level: 2, role: 'VP Consulting', originalMessage: 'Hit $25B revenue through expanding AI practice while maintaining existing client base', receivedMessage: 'Balance AI growth with protecting existing revenue — don\'t disrupt legacy client relationships', degradationScore: 52 },
+      { level: 3, role: 'Consulting Team', originalMessage: 'Balance AI growth with protecting existing revenue — don\'t disrupt legacy client relationships', receivedMessage: 'Keep current clients happy (legacy projects), add AI when clients ask for it', degradationScore: 78 },
+    ],
+    informationSilo: false,
+    siloScore: 41,
+  },
+
+  'Security Division': {
+    deviationMetric: 'Zero Trust architecture rollout velocity',
+    deviationMagnitude: -42,
+    rootCauseSummary: 'Resource constraint (40% understaffing) → team pivoted to compliance automation (easier wins) → Zero Trust left behind',
+    rootCauseConfidence: 85,
+    forecastRevenueMiss: 65,
+    forecastTimeframeWeeks: 10,
+    counterfactualWithFix: 22,
+    counterfactualWorstCase: 220,
+    causalChain: [
+      { step: 1, cause: 'Hiring freeze left Security Division 40% below target headcount', effect: 'Team cannot execute Zero Trust across 12 client environments simultaneously', evidenceType: 'resource', confidence: 92 },
+      { step: 2, cause: 'Understaffed team self-selected easier compliance automation projects', effect: 'Zero Trust — the strategic priority — delayed 12 weeks', evidenceType: 'resource', confidence: 88 },
+      { step: 3, cause: 'Zero Trust delay blocking hybrid cloud adoption in regulated industries', effect: '3 banking clients froze IBM cloud migrations pending security certification', evidenceType: 'market', confidence: 82 },
+    ],
+    evidenceQuotes: [
+      { author: 'Chen Wei', role: 'Team Lead', channel: 'email', date: 'Jul 8, 2026', quote: "We have 13 people doing the work of 22. I've requested 8 security architects for 4 months. HR keeps saying Q4. In the meantime, Zero Trust is the thing that's slipping — we physically can't cover everything.", sentiment: 'negative', tags: ['resource', 'hiring', 'talent'] },
+      { author: 'Anna Petrovich', role: 'Security Architect', channel: 'slack', date: 'Jul 20, 2026', quote: "I chose to prioritize compliance automation this sprint because it's achievable with current team. Zero Trust needs 3 more architects we don't have. I know this isn't what leadership wants to hear.", sentiment: 'mixed', tags: ['resource', 'prioritization'] },
+      { author: 'Daniel Osei', role: 'Client Success Manager', channel: 'meeting', date: 'Aug 2, 2026', quote: "First National Bank explicitly told us: 'We won't move another workload to IBM Cloud until you can certify Zero Trust compliance.' That's $120M in contract expansion sitting there.", sentiment: 'negative', tags: ['market', 'revenue', 'client'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Cloud Platform', communicationFreq: 72, strength: 'strong', type: 'collaboration' },
+      { targetTeam: 'Watson AI', communicationFreq: 38, strength: 'weak', type: 'information' },
+      { targetTeam: 'HR & Talent', communicationFreq: 55, strength: 'moderate', type: 'information' },
+    ],
+    opinionLeaders: [
+      { name: 'Chen Wei', role: 'Team Lead', influenceScore: 76, alignmentBias: 'neutral', reachCount: 22 },
+      { name: 'Anna Petrovich', role: 'Security Architect', influenceScore: 68, alignmentBias: 'misaligned', reachCount: 12 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'Zero trust architecture is IBM\'s strategic security framework — non-negotiable for all hybrid cloud clients', receivedMessage: 'Zero trust architecture is IBM\'s strategic security framework — non-negotiable for all hybrid cloud clients', degradationScore: 0 },
+      { level: 1, role: 'SVP Security', originalMessage: 'Zero trust architecture is IBM\'s strategic security framework — non-negotiable for all hybrid cloud clients', receivedMessage: 'Deliver zero trust but be realistic about resource constraints from Q3 freeze', degradationScore: 35 },
+      { level: 2, role: 'VP Security Division', originalMessage: 'Deliver zero trust but be realistic about resource constraints from Q3 freeze', receivedMessage: 'Zero trust is the goal but prioritize deliverables we can actually complete this quarter', degradationScore: 62 },
+      { level: 3, role: 'Security Team', originalMessage: 'Zero trust is the goal but prioritize deliverables we can actually complete this quarter', receivedMessage: 'Focus on compliance automation (wins we can show) while zero trust waits for more headcount', degradationScore: 90 },
+    ],
+    informationSilo: true,
+    siloScore: 71,
+  },
+
+  'Research Division': {
+    deviationMetric: 'Research-to-product commercialization pipeline velocity',
+    deviationMagnitude: -12,
+    rootCauseSummary: 'Market signal (competitor AI releases) → Research reinterpreted priorities → shifted from product roadmap to publications',
+    rootCauseConfidence: 82,
+    forecastRevenueMiss: 18,
+    forecastTimeframeWeeks: 16,
+    counterfactualWithFix: 6,
+    counterfactualWorstCase: 72,
+    causalChain: [
+      { step: 1, cause: 'OpenAI GPT-5 and Google Gemini Ultra released Q2 2026 — raised external benchmark expectations', effect: 'Research team shifted focus to publication-driven benchmark competition', evidenceType: 'market', confidence: 88 },
+      { step: 2, cause: 'Research output optimized for academic impact vs. product integration', effect: 'Watson AI team received research 2 quarters later than roadmap required', evidenceType: 'communication', confidence: 82 },
+      { step: 3, cause: 'Product roadmap dependencies from Research delayed', effect: 'Three watsonx features postponed — 11,000 potential new clients blocked', evidenceType: 'market', confidence: 76 },
+    ],
+    evidenceQuotes: [
+      { author: 'Dr. Aisha Kamau', role: 'Team Lead', channel: 'meeting', date: 'Jul 16, 2026', quote: "When GPT-5 dropped, we made a team decision to go head-to-head on benchmarks. The academic community would dismiss IBM AI if we didn't respond. Looking back, we should have coordinated with product first.", sentiment: 'mixed', tags: ['market', 'external', 'strategy'] },
+      { author: 'Kwame Asante', role: 'Research Scientist', channel: 'email', date: 'Jul 31, 2026', quote: "I've published 4 papers this quarter — all top-tier conferences. But the Watson AI team told me last week that two features they were depending on us for are now 3 months delayed. I didn't realize our timelines were coupled.", sentiment: 'mixed', tags: ['communication', 'dependencies'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Watson AI', communicationFreq: 78, strength: 'strong', type: 'collaboration' },
+      { targetTeam: 'HR & Talent', communicationFreq: 28, strength: 'weak', type: 'information' },
+    ],
+    opinionLeaders: [
+      { name: 'Dr. Aisha Kamau', role: 'Team Lead', influenceScore: 85, alignmentBias: 'aligned', reachCount: 19 },
+      { name: 'Kwame Asante', role: 'Research Scientist', influenceScore: 74, alignmentBias: 'neutral', reachCount: 11 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'IBM Research must commercialize breakthroughs into watsonx products faster — research-to-market speed is a competitive advantage', receivedMessage: 'IBM Research must commercialize breakthroughs into watsonx products faster — research-to-market speed is a competitive advantage', degradationScore: 0 },
+      { level: 1, role: 'SVP Research & Development', originalMessage: 'IBM Research must commercialize breakthroughs into watsonx products faster — research-to-market speed is a competitive advantage', receivedMessage: 'Accelerate commercialization but maintain IBM\'s scientific credibility in the face of competitor pressure', degradationScore: 18 },
+      { level: 2, role: 'VP Research', originalMessage: 'Accelerate commercialization but maintain IBM\'s scientific credibility in the face of competitor pressure', receivedMessage: 'Balance product integration with maintaining our publication record to attract top researchers', degradationScore: 42 },
+      { level: 3, role: 'Research Team', originalMessage: 'Balance product integration with maintaining our publication record to attract top researchers', receivedMessage: 'Publications are how we win in the AI race right now — product integration can follow', degradationScore: 65 },
+    ],
+    informationSilo: false,
+    siloScore: 25,
+  },
+
+  'Enterprise Sales': {
+    deviationMetric: 'Hybrid cloud + AI deal conversion rate',
+    deviationMagnitude: -58,
+    rootCauseSummary: 'Incentive misalignment (legacy quotas) + no AI training → reps selling legacy products in a strategy-first world',
+    rootCauseConfidence: 91,
+    forecastRevenueMiss: 120,
+    forecastTimeframeWeeks: 8,
+    counterfactualWithFix: 38,
+    counterfactualWorstCase: 420,
+    causalChain: [
+      { step: 1, cause: 'Quota structures reward legacy IBM product sales at higher commission rates than hybrid cloud/AI bundles', effect: '65% of reps still primarily pitch legacy products despite strategy pivot', evidenceType: 'incentive', confidence: 94 },
+      { step: 2, cause: 'Only 35% of reps trained on watsonx and hybrid cloud solutions', effect: 'Majority of sales team cannot credibly position IBM\'s strategic products', evidenceType: 'talent', confidence: 91 },
+      { step: 3, cause: 'Lost 3 major AI transformation deals to Accenture and Microsoft in Q3', effect: '$340M pipeline stalled — deal velocity down 38% from Q2', evidenceType: 'market', confidence: 88 },
+    ],
+    evidenceQuotes: [
+      { author: 'Marcus Thompson', role: 'Team Lead', channel: 'email', date: 'Jul 5, 2026', quote: "I'll be direct: my team is paid to sell legacy products. The commission on a $5M mainframe renewal is higher than a $8M watsonx deal. Until that changes, behavior won't change. This is a comp plan problem, not a motivation problem.", sentiment: 'negative', tags: ['incentive', 'compensation'] },
+      { author: 'Rebecca Santos', role: 'Enterprise Account Executive', channel: 'slack', date: 'Jul 14, 2026', quote: "Client asked me to demo watsonx governance features. I literally didn't know what they were. Had to cancel the meeting. Found out the training waitlist is 6 months long. We're sending reps into AI deals blind.", sentiment: 'negative', tags: ['training', 'talent', 'delivery'] },
+      { author: 'Tom Winters', role: 'Regional VP Sales', channel: 'meeting', date: 'Jul 28, 2026', quote: "We lost First Horizon Bank to Microsoft. The Microsoft rep had a live copilot demo. We had a slide deck from 2024. I don't blame my reps — they literally don't have the tools or training to compete.", sentiment: 'negative', tags: ['competitive', 'market'] },
+      { author: 'Lisa Chen', role: 'Sales Operations', channel: 'report', date: 'Aug 6, 2026', quote: "Q3 data: 65% of reps haven't touched a hybrid cloud or AI deal this quarter. Pipeline composition: 72% legacy, 28% strategic. Target was 60% strategic by Q3. We are going in the wrong direction.", sentiment: 'negative', tags: ['data', 'metrics', 'incentive'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'IBM Consulting', communicationFreq: 82, strength: 'strong', type: 'collaboration' },
+      { targetTeam: 'Watson AI', communicationFreq: 62, strength: 'strong', type: 'information' },
+      { targetTeam: 'Cloud Platform', communicationFreq: 50, strength: 'moderate', type: 'information' },
+      { targetTeam: 'Finance & Operations', communicationFreq: 58, strength: 'moderate', type: 'reporting' },
+      { targetTeam: 'HR & Talent', communicationFreq: 70, strength: 'strong', type: 'information' },
+    ],
+    opinionLeaders: [
+      { name: 'Marcus Thompson', role: 'Team Lead', influenceScore: 88, alignmentBias: 'misaligned', reachCount: 38 },
+      { name: 'Tom Winters', role: 'Regional VP Sales', influenceScore: 82, alignmentBias: 'misaligned', reachCount: 28 },
+      { name: 'Rebecca Santos', role: 'Account Executive', influenceScore: 64, alignmentBias: 'neutral', reachCount: 15 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'Pivot sales organization to hybrid cloud + AI bundles — these are IBM\'s strategic growth engines for 2025-2026', receivedMessage: 'Pivot sales organization to hybrid cloud + AI bundles — these are IBM\'s strategic growth engines for 2025-2026', degradationScore: 0 },
+      { level: 1, role: 'Chief Revenue Officer', originalMessage: 'Pivot sales organization to hybrid cloud + AI bundles — these are IBM\'s strategic growth engines for 2025-2026', receivedMessage: 'Grow AI and cloud business while protecting existing revenue base from legacy products', degradationScore: 32 },
+      { level: 2, role: 'VP Global Sales', originalMessage: 'Grow AI and cloud business while protecting existing revenue base from legacy products', receivedMessage: 'Hit your numbers — cloud and AI are a priority but legacy deals still count toward quota', degradationScore: 60 },
+      { level: 3, role: 'Enterprise Sales Team', originalMessage: 'Hit your numbers — cloud and AI are a priority but legacy deals still count toward quota', receivedMessage: 'Sell whatever closes — legacy mainframe deals pay better commission anyway', degradationScore: 95 },
+    ],
+    informationSilo: true,
+    siloScore: 88,
+  },
+
+  'Finance & Operations': {
+    deviationMetric: 'Strategic budget reallocation to cloud/AI',
+    deviationMagnitude: -22,
+    rootCauseSummary: 'Legacy cost-center mindset → finance optimizing for cost reduction vs strategic investment allocation',
+    rootCauseConfidence: 79,
+    forecastRevenueMiss: 35,
+    forecastTimeframeWeeks: 16,
+    counterfactualWithFix: 11,
+    counterfactualWorstCase: 140,
+    causalChain: [
+      { step: 1, cause: 'Finance team\'s incentives tied to gross margin % (57% target) — not revenue growth', effect: 'Budget proposals consistently favor cost-cutting over strategic cloud/AI investments', evidenceType: 'incentive', confidence: 85 },
+      { step: 2, cause: 'Legacy technology depreciation schedules create financial bias to "use what we paid for"', effect: '30% budget reallocation to hybrid cloud only 14% complete despite 48% project progress metric', evidenceType: 'resource', confidence: 80 },
+    ],
+    evidenceQuotes: [
+      { author: 'Sandra Mitchell', role: 'Team Lead', channel: 'email', date: 'Jul 22, 2026', quote: "The CFO scorecard measures margin efficiency. Every dollar I move to cloud investment hurts my gross margin number this year even if it creates $5 in revenue next year. The incentive system is fighting the strategy.", sentiment: 'mixed', tags: ['incentive', 'budget'] },
+      { author: 'Paul Hendricks', role: 'Financial Controller', channel: 'meeting', date: 'Aug 4, 2026', quote: "I flagged this in Q1: we have $2.3B in fully-depreciated legacy infrastructure. Accounting rules mean migrating it to cloud shows as a cost increase. Until we get an accounting treatment exception, finance will always look like it's blocking cloud.", sentiment: 'mixed', tags: ['resource', 'accounting'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Enterprise Sales', communicationFreq: 58, strength: 'moderate', type: 'reporting' },
+      { targetTeam: 'Cloud Platform', communicationFreq: 45, strength: 'moderate', type: 'approval' },
+      { targetTeam: 'IBM Consulting', communicationFreq: 42, strength: 'moderate', type: 'reporting' },
+    ],
+    opinionLeaders: [
+      { name: 'Sandra Mitchell', role: 'Team Lead', influenceScore: 77, alignmentBias: 'neutral', reachCount: 16 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'Aggressively reallocate 30% of budget to hybrid cloud and AI — this is a strategic investment, not a cost', receivedMessage: 'Aggressively reallocate 30% of budget to hybrid cloud and AI — this is a strategic investment, not a cost', degradationScore: 0 },
+      { level: 1, role: 'CFO', originalMessage: 'Aggressively reallocate 30% of budget to hybrid cloud and AI — this is a strategic investment, not a cost', receivedMessage: 'Invest in cloud and AI while maintaining our gross margin targets — both must be achieved', degradationScore: 30 },
+      { level: 2, role: 'VP Finance', originalMessage: 'Invest in cloud and AI while maintaining our gross margin targets — both must be achieved', receivedMessage: 'Margin targets are non-negotiable — cloud investment only if it doesn\'t hurt gross margin this year', degradationScore: 58 },
+      { level: 3, role: 'Finance Team', originalMessage: 'Margin targets are non-negotiable — cloud investment only if it doesn\'t hurt gross margin this year', receivedMessage: 'Optimize for margin — flag cloud investments that create short-term cost increases for executive review', degradationScore: 75 },
+    ],
+    informationSilo: false,
+    siloScore: 38,
+  },
+
+  'HR & Talent': {
+    deviationMetric: 'AI talent acquisition rate vs strategy-required headcount',
+    deviationMagnitude: -55,
+    rootCauseSummary: 'Talent pipeline shortage (external) + hiring freeze (internal) → 56% AI headcount gap directly threatening all three strategic pillars',
+    rootCauseConfidence: 90,
+    forecastRevenueMiss: 22,
+    forecastTimeframeWeeks: 20,
+    counterfactualWithFix: 7,
+    counterfactualWorstCase: 88,
+    causalChain: [
+      { step: 1, cause: 'Q3 hiring freeze reduced AI talent acquisition budget by 60%', effect: 'AI/ML engineer hiring pace dropped from 200/month to 68/month', evidenceType: 'resource', confidence: 93 },
+      { step: 2, cause: 'Internal reskilling (watsonx Academy) backlogged 8 months', effect: '80% of strategic talent gap must come from external hiring — creating dependency', evidenceType: 'resource', confidence: 87 },
+    ],
+    evidenceQuotes: [
+      { author: 'Lisa Park', role: 'Team Lead', channel: 'meeting', date: 'Jul 9, 2026', quote: "The CEO says hire 5,000 AI engineers. Finance says freeze hiring to protect margins. I'm stuck in the middle delivering on a strategy we can't resource. I've escalated three times. We need a decision at the board level.", sentiment: 'negative', tags: ['resource', 'escalation', 'leadership'] },
+      { author: 'Marcos Alvarez', role: 'Talent Acquisition Lead', channel: 'slack', date: 'Jul 23, 2026', quote: "Google, Microsoft, and OpenAI are offering 40% higher total comp for the same AI profiles we need. We've lost 12 accepted offers in the last 6 weeks to competitors. Our comp bands are from 2022.", sentiment: 'negative', tags: ['competitive', 'compensation'] },
+    ],
+    networkConnections: [
+      { targetTeam: 'Watson AI', communicationFreq: 45, strength: 'moderate', type: 'information' },
+      { targetTeam: 'Security Division', communicationFreq: 55, strength: 'moderate', type: 'information' },
+      { targetTeam: 'Enterprise Sales', communicationFreq: 70, strength: 'strong', type: 'information' },
+      { targetTeam: 'Research Division', communicationFreq: 28, strength: 'weak', type: 'information' },
+    ],
+    opinionLeaders: [
+      { name: 'Lisa Park', role: 'Team Lead', influenceScore: 80, alignmentBias: 'aligned', reachCount: 14 },
+      { name: 'Marcos Alvarez', role: 'Talent Acquisition Lead', influenceScore: 62, alignmentBias: 'neutral', reachCount: 8 },
+    ],
+    messageDegradation: [
+      { level: 0, role: 'CEO / Board', originalMessage: 'Talent is our #1 execution risk — hire 5,000 AI engineers by FY2026, this is the top priority', receivedMessage: 'Talent is our #1 execution risk — hire 5,000 AI engineers by FY2026, this is the top priority', degradationScore: 0 },
+      { level: 1, role: 'CHRO', originalMessage: 'Talent is our #1 execution risk — hire 5,000 AI engineers by FY2026, this is the top priority', receivedMessage: 'Accelerate AI talent — within the budget approved for this fiscal year', degradationScore: 25 },
+      { level: 2, role: 'VP HR', originalMessage: 'Accelerate AI talent — within the budget approved for this fiscal year', receivedMessage: 'AI hiring is priority but the Q3 freeze means we have to be creative — reskilling over external hiring', degradationScore: 50 },
+      { level: 3, role: 'HR & Talent Team', originalMessage: 'AI hiring is priority but Q3 freeze means reskilling over external hiring', receivedMessage: 'No budget for external AI hires — focus on watsonx Academy even though backlog is 8 months', degradationScore: 72 },
+    ],
+    informationSilo: false,
+    siloScore: 28,
+  },
+};
+
 // ── Seeding Script ───────────────────────────────────────────────────────────
 
 async function seed() {
@@ -475,6 +784,7 @@ async function seed() {
     const isHotspot   = driftVel < -1.5 || (teamData.alignmentScore < 60 && teamData.trend === 'declining');
     const alignTrend  = generateTrendHistory(histPoints);
     const empComms    = generateCommunications(teamData.name, teamData.informedPct, 10);
+    const causal      = TEAM_CAUSAL_DATA[teamData.name] || {};
 
     const teamDoc = await Team.create({
       name:            teamData.name,
@@ -496,6 +806,23 @@ async function seed() {
       financialRisk:   finRisk,
       isDriftHotspot:  isHotspot,
       lastAnalyzedAt:  new Date(),
+      // Causal reasoning
+      deviationMetric:       causal.deviationMetric || '',
+      deviationMagnitude:    causal.deviationMagnitude || 0,
+      rootCauseSummary:      causal.rootCauseSummary || '',
+      rootCauseConfidence:   causal.rootCauseConfidence || 75,
+      causalChain:           causal.causalChain || [],
+      evidenceQuotes:        causal.evidenceQuotes || [],
+      forecastRevenueMiss:   causal.forecastRevenueMiss || 0,
+      forecastTimeframeWeeks: causal.forecastTimeframeWeeks || 12,
+      counterfactualWithFix:  causal.counterfactualWithFix || 0,
+      counterfactualWorstCase: causal.counterfactualWorstCase || 0,
+      // Network intelligence
+      networkConnections:  causal.networkConnections || [],
+      opinionLeaders:      causal.opinionLeaders || [],
+      messageDegradation:  causal.messageDegradation || [],
+      informationSilo:     causal.informationSilo || false,
+      siloScore:           causal.siloScore || 0,
     });
 
     await Prediction.create({
@@ -549,5 +876,6 @@ if (require.main === module) {
     process.exit(1);
   });
 }
+
 
 module.exports = { seed };

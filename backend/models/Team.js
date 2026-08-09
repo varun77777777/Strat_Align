@@ -29,6 +29,49 @@ const EmployeeCommunicationSchema = new mongoose.Schema({
   strategyMentions: { type: Number, default: 0 },
 }, { _id: false });
 
+// ── Causal Reasoning Sub-schemas ────────────────────────────────────────────
+
+const CausalStepSchema = new mongoose.Schema({
+  step:        { type: Number, required: true },
+  cause:       { type: String, required: true },
+  effect:      { type: String, required: true },
+  evidenceType:{ type: String, enum: ['resource', 'market', 'talent', 'incentive', 'communication', 'external'], default: 'communication' },
+  confidence:  { type: Number, min: 0, max: 100, default: 80 },
+}, { _id: false });
+
+const EvidenceQuoteSchema = new mongoose.Schema({
+  author:    { type: String, required: true },
+  role:      { type: String, default: '' },
+  channel:   { type: String, enum: ['email', 'slack', 'meeting', 'survey', 'report'], default: 'email' },
+  date:      { type: String, required: true },
+  quote:     { type: String, required: true },
+  sentiment: { type: String, enum: ['positive', 'neutral', 'negative', 'mixed'], default: 'neutral' },
+  tags:      { type: [String], default: [] },
+}, { _id: false });
+
+const NetworkConnectionSchema = new mongoose.Schema({
+  targetTeam:        { type: String, required: true },
+  communicationFreq: { type: Number, min: 0, max: 100, default: 50 },
+  strength:          { type: String, enum: ['strong', 'moderate', 'weak'], default: 'moderate' },
+  type:              { type: String, enum: ['collaboration', 'reporting', 'information', 'approval'], default: 'information' },
+}, { _id: false });
+
+const OpinionLeaderSchema = new mongoose.Schema({
+  name:          { type: String, required: true },
+  role:          { type: String, default: '' },
+  influenceScore:{ type: Number, min: 0, max: 100, default: 50 },
+  alignmentBias: { type: String, enum: ['aligned', 'neutral', 'misaligned'], default: 'neutral' },
+  reachCount:    { type: Number, default: 0 },
+}, { _id: false });
+
+const MessageDegradationSchema = new mongoose.Schema({
+  level:           { type: Number, required: true },
+  role:            { type: String, required: true },
+  originalMessage: { type: String, required: true },
+  receivedMessage: { type: String, required: true },
+  degradationScore:{ type: Number, min: 0, max: 100, default: 0 },
+}, { _id: false });
+
 // ── Main Team Schema ─────────────────────────────────────────────────────────
 
 const TeamSchema = new mongoose.Schema({
@@ -55,6 +98,27 @@ const TeamSchema = new mongoose.Schema({
 
   // Simulated employee communications (NLP source)
   employeeCommunications: { type: [EmployeeCommunicationSchema], default: [] },
+
+  // ── Causal Reasoning fields ───────────────────────────────────────────────
+  deviationMetric:      { type: String, default: '' },
+  deviationMagnitude:   { type: Number, default: 0 },
+  rootCauseSummary:     { type: String, default: '' },
+  rootCauseConfidence:  { type: Number, min: 0, max: 100, default: 75 },
+  causalChain:          { type: [CausalStepSchema], default: [] },
+  evidenceQuotes:       { type: [EvidenceQuoteSchema], default: [] },
+
+  // Business impact forecast
+  forecastRevenueMiss:     { type: Number, default: 0 },
+  forecastTimeframeWeeks:  { type: Number, default: 12 },
+  counterfactualWithFix:   { type: Number, default: 0 },
+  counterfactualWorstCase: { type: Number, default: 0 },
+
+  // ── Network Intelligence fields ───────────────────────────────────────────
+  networkConnections: { type: [NetworkConnectionSchema], default: [] },
+  opinionLeaders:     { type: [OpinionLeaderSchema], default: [] },
+  messageDegradation: { type: [MessageDegradationSchema], default: [] },
+  informationSilo:    { type: Boolean, default: false },
+  siloScore:          { type: Number, min: 0, max: 100, default: 0 },
 
   // Derived / computed
   trend:  {

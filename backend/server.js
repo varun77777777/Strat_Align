@@ -15,6 +15,8 @@ const teamsRouter           = require('./routes/teams');
 const predictionsRouter     = require('./routes/predictions');
 const recommendationsRouter = require('./routes/recommendations');
 const driftRouter           = require('./routes/drift');
+const causalRouter          = require('./routes/causal');
+const networkRouter         = require('./routes/network');
 
 // ── Seed ──────────────────────────────────────────────────────────────────────
 const { seed } = require('./seed');
@@ -30,7 +32,7 @@ const app = express();
 // ── Rate Limiting ─────────────────────────────────────────────────────────────
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '60000', 10),
-  max:      parseInt(process.env.RATE_LIMIT_MAX       || '100',   10),
+  max:      parseInt(process.env.RATE_LIMIT_MAX       || '10000',   10),
   standardHeaders: true,
   legacyHeaders:   false,
   message: { success: false, error: 'Too many requests, please try again later.' },
@@ -93,6 +95,8 @@ app.use('/api/teams',           teamsRouter);
 app.use('/api/predictions',     predictionsRouter);
 app.use('/api/recommendations', recommendationsRouter);
 app.use('/api/drift',           driftRouter);
+app.use('/api/causal',          causalRouter);
+app.use('/api/network',         networkRouter);
 
 // Convenience alias — POST /api/analyze maps to recommendations router
 app.post('/api/analyze', (req, res, next) => {

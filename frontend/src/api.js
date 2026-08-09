@@ -4,69 +4,28 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10000, // 10 seconds timeout
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 10000,
 });
 
-export const getTeams = async () => {
-  const response = await api.get('/teams');
-  return response.data;
-};
+export const getTeams              = async ()              => (await api.get('/teams')).data;
+export const getTeamById           = async (id)            => (await api.get(`/teams/${id}`)).data;
+export const getPredictions        = async ()              => (await api.get('/predictions')).data;
+export const getRecommendations    = async ()              => (await api.get('/recommendations')).data;
+export const getAlignmentHistory   = async (days = 7)     => (await api.get(`/alignment-history?days=${days}`)).data;
+export const getDriftHotspots      = async ()              => (await api.get('/drift/hotspots')).data;
+export const getImpactModel        = async ()              => (await api.get('/drift/impact-model')).data;
+export const autoCorrectTeam       = async (teamId)        => (await api.post('/drift/auto-correct', { teamId })).data;
+export const simulateUnderstanding = async (teamId, pct)   => (await api.post('/drift/simulate-understanding', { teamId, informedPercent: pct })).data;
+export const applyRecommendation   = async (id)            => (await api.post(`/recommendations/${id}/apply`)).data;
+export const analyzeStrategy       = async (teamId, doc, comms) => (await api.post('/analyze', { team_id: teamId, strategy_doc: doc, communications: comms })).data;
 
-export const getTeamById = async (id) => {
-  const response = await api.get(`/teams/${id}`);
-  return response.data;
-};
+// ── Causal Reasoning ──────────────────────────────────────────────────────────
+export const getCausalReport       = async ()       => (await api.get('/causal/report')).data;
+export const getCausalReportByTeam = async (teamId) => (await api.get(`/causal/report/${teamId}`)).data;
 
-export const getPredictions = async () => {
-  const response = await api.get('/predictions');
-  return response.data;
-};
-
-export const getRecommendations = async () => {
-  const response = await api.get('/recommendations');
-  return response.data;
-};
-
-export const getAlignmentHistory = async (days = 7) => {
-  const response = await api.get(`/alignment-history?days=${days}`);
-  return response.data;
-};
-
-export const getDriftHotspots = async () => {
-  const response = await api.get('/drift/hotspots');
-  return response.data;
-};
-
-export const getImpactModel = async () => {
-  const response = await api.get('/drift/impact-model');
-  return response.data;
-};
-
-export const autoCorrectTeam = async (teamId) => {
-  const response = await api.post('/drift/auto-correct', { teamId });
-  return response.data;
-};
-
-export const simulateUnderstanding = async (teamId, informedPercent) => {
-  const response = await api.post('/drift/simulate-understanding', { teamId, informedPercent });
-  return response.data;
-};
-
-export const applyRecommendation = async (id) => {
-  const response = await api.post(`/recommendations/${id}/apply`);
-  return response.data;
-};
-
-export const analyzeStrategy = async (teamId, strategyDoc, communications) => {
-  const response = await api.post('/analyze', {
-    team_id: teamId,
-    strategy_doc: strategyDoc,
-    communications: communications,
-  });
-  return response.data;
-};
+// ── Network Intelligence ──────────────────────────────────────────────────────
+export const getNetworkGraph        = async ()       => (await api.get('/network/graph')).data;
+export const getMessageDegradation  = async (teamId) => (await api.get(`/network/degradation/${teamId}`)).data;
 
 export default api;

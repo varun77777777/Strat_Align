@@ -10,63 +10,102 @@ const generateSmartRecommendations = (teams, apiRecommendations, appliedSmartIds
 
   const smart = [];
 
-  // Rule 1: Communication — teams without updates in 7+ days
-  const staleCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const staleTeams = teams.filter(t => {
-    try {
-      return t.lastUpdated && new Date(t.lastUpdated).getTime() < staleCutoff;
-    } catch { return false; }
-  });
-  if (staleTeams.length > 0) {
+  // Team 1: Enterprise Sales (Comp restructuring & watsonx training)
+  const salesTeam = teams.find(t => t.name === 'Enterprise Sales');
+  if (salesTeam && salesTeam.alignmentScore < 60) {
     smart.push({
-      id: 'smart-comm',
-      action: '📢 Schedule Strategy Sync Meetings',
-      expectedImprovement: 22,
-      impact: '18–25% alignment improvement',
-      complexity: 'Easy',
-      timeline: '1–2 days',
-      affectedTeams: staleTeams.map(t => t.name || t.teamName).join(', '),
-      applied: appliedSmartIds.includes('smart-comm'),
+      id: 'smart-sales-incentives',
+      action: '🎯 Restructure Sales Quotas & Comp Plan',
+      expectedImprovement: 25,
+      impact: 'Strategic ARR deals weighted at 1.5x commission',
+      complexity: 'Medium',
+      timeline: '1 week',
+      affectedTeams: 'Enterprise Sales',
+      applied: appliedSmartIds.includes('smart-sales-incentives'),
+      priority: 1,
+      isSmartGenerated: true,
+    });
+    smart.push({
+      id: 'smart-sales-training',
+      action: '🎓 Deploy watsonx Sales Bootcamp',
+      expectedImprovement: 20,
+      impact: 'Certify all 3,000 account reps on strategic bundles',
+      complexity: 'Hard',
+      timeline: '2 weeks',
+      affectedTeams: 'Enterprise Sales',
+      applied: appliedSmartIds.includes('smart-sales-training'),
       priority: 1,
       isSmartGenerated: true,
     });
   }
 
-  // Rule 2: Resource — teams without resources allocated
-  const underResourced = teams.filter(t => !t.resourcesAllocated && t.alignmentScore < 70);
-  if (underResourced.length > 0) {
+  // Team 2: Security Division (Hiring freeze exemption & Zero Trust prioritization)
+  const secTeam = teams.find(t => t.name === 'Security Division');
+  if (secTeam && secTeam.alignmentScore < 60) {
     smart.push({
-      id: 'smart-resource',
-      action: '💼 Rebalance Resource Allocation',
-      expectedImprovement: 28,
-      impact: '22–35% execution improvement',
+      id: 'smart-security-hiring',
+      action: '💼 Unlock Security Architect Headcount Exception',
+      expectedImprovement: 18,
+      impact: 'Fill 8 open roles to cover regulated bank deployments',
       complexity: 'Medium',
-      timeline: '3–5 days',
-      affectedTeams: underResourced.map(t => t.name || t.teamName).join(', '),
-      applied: appliedSmartIds.includes('smart-resource'),
+      timeline: '30 days',
+      affectedTeams: 'Security Division',
+      applied: appliedSmartIds.includes('smart-security-hiring'),
       priority: 2,
       isSmartGenerated: true,
     });
   }
 
-  // Rule 3: Incentives — teams declining or critical
-  const misaligned = teams.filter(t => t.trend === 'declining' || (t.alignmentScore ?? 100) < 50);
-  if (misaligned.length > 0) {
+  // Team 3: Cloud Platform (VP mandate synchronization)
+  const cloudTeam = teams.find(t => t.name === 'Cloud Platform');
+  if (cloudTeam && cloudTeam.alignmentScore < 75) {
     smart.push({
-      id: 'smart-incentive',
-      action: '🎯 Realign Team Incentives & OKRs',
-      expectedImprovement: 23,
-      impact: '15–30% improvement',
+      id: 'smart-cloud-alignment',
+      action: '📢 Align VP Engineering & Product Mandates',
+      expectedImprovement: 15,
+      impact: 'Synchronize AWS co-sell and IBM Cloud roadmap timelines',
+      complexity: 'Easy',
+      timeline: '1–2 days',
+      affectedTeams: 'Cloud Platform',
+      applied: appliedSmartIds.includes('smart-cloud-alignment'),
+      priority: 2,
+      isSmartGenerated: true,
+    });
+  }
+
+  // Team 4: IBM Consulting (Standardize AI playbook)
+  const consultingTeam = teams.find(t => t.name === 'IBM Consulting');
+  if (consultingTeam && consultingTeam.alignmentScore < 70) {
+    smart.push({
+      id: 'smart-consulting-methodology',
+      action: '🎯 Standardize AI Consulting Playbooks',
+      expectedImprovement: 15,
+      impact: 'Equip practice areas with Accenture-beating sales decks',
       complexity: 'Medium',
-      timeline: '1–2 weeks',
-      affectedTeams: misaligned.map(t => t.name || t.teamName).join(', '),
-      applied: appliedSmartIds.includes('smart-incentive'),
+      timeline: '1 week',
+      affectedTeams: 'IBM Consulting',
+      applied: appliedSmartIds.includes('smart-consulting-methodology'),
       priority: 3,
       isSmartGenerated: true,
     });
   }
 
-  // Merge smart recs with API recs (smart first, then API ones not duplicated)
+  // Add a generic fallback one if no specific team is matched
+  if (smart.length === 0) {
+    smart.push({
+      id: 'smart-fallback',
+      action: '📢 Schedule Strategy Sync Meetings',
+      expectedImprovement: 10,
+      impact: 'Bridge communication gap via 1:1 syncs',
+      complexity: 'Easy',
+      timeline: '1–2 days',
+      affectedTeams: teams.map(t => t.name).slice(0, 3).join(', '),
+      applied: appliedSmartIds.includes('smart-fallback'),
+      priority: 3,
+      isSmartGenerated: true,
+    });
+  }
+
   const apiFiltered = (apiRecommendations || []).filter(r => !r.isSmartGenerated);
   return [...smart, ...apiFiltered];
 };

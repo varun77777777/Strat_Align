@@ -1,6 +1,27 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+const getStatusStyles = (score) => {
+  if (score >= 80) return { color: 'var(--status-good)' };
+  if (score >= 60) return { color: '#81c784' };
+  if (score >= 45) return { color: 'var(--status-at-risk)' };
+  return { color: 'var(--status-critical)' };
+};
+
+const getMicroCorrectionNudge = (teamName) => {
+  const nudges = {
+    'Watson AI': 'Marketing/Sales: align watsonx capability claims. Tech leads: accelerate AI governance integrations.',
+    'Cloud Platform': 'VPs of Engineering & Product: clarify AWS vs. IBM Cloud multi-cloud support timelines to resolve ambiguity.',
+    'IBM Consulting': 'Finance: adjust consultant incentive targets. Practice Leads: standardize AI transformational deck methodology.',
+    'Security Division': 'HR: exception to Q3 hiring freeze to onboard 4 security architects. Team: rebalance compliance and Zero Trust.',
+    'Research Division': 'Product Management: review publication milestones vs. watsonx feature roadmap dependencies weekly.',
+    'Enterprise Sales': 'HR: immediate watsonx sales training bootcamp. Sales Ops: update quota metrics to weight strategic ARR at 1.5x.',
+    'Finance & Operations': 'CFO: create ARR-linked cost metrics exceptions to remove legacy technology deprecation biases.',
+    'HR & Talent': 'Board: increase AI recruiting budgets by 40% and align compensation bands with competitive benchmarks.',
+  };
+  return nudges[teamName] || 'Schedule leadership sync alignment meetings and review strategic KPIs vs. local metrics.';
+};
+
 const DriftIntelligence = ({ driftData, impactModel, onAutoCorrect, correctingTeamId, teams, simulation, simulating, onSimulate }) => {
   const hotspots = driftData?.hotspots ?? [];
   const summary = driftData?.summary;
@@ -15,6 +36,7 @@ const DriftIntelligence = ({ driftData, impactModel, onAutoCorrect, correctingTe
 
   if (!summary && !current) return null;
 
+
   return (
     <section className="glass-card" aria-label="Strategic drift intelligence">
       <div className="section-title-bar">
@@ -23,35 +45,75 @@ const DriftIntelligence = ({ driftData, impactModel, onAutoCorrect, correctingTe
       </div>
 
       <div className="drift-summary-grid">
-        <div><span>Drift hotspots</span><strong>{summary?.hotspotCount ?? 0} / {summary?.totalTeams ?? 0}</strong></div>
-        <div><span>Financial risk</span><strong>${summary?.totalFinancialRisk ?? 0}M</strong></div>
-        <div><span>Execution probability</span><strong>{current?.executionSuccess ?? 0}%</strong></div>
-        <div><span>With correction</span><strong className="drift-positive">{corrected?.executionSuccess ?? 0}%</strong></div>
+        <div><span>Drift Hotspots</span><strong>{summary?.hotspotCount ?? 0} / {summary?.totalTeams ?? 0}</strong></div>
+        <div><span>Financial Risk</span><strong style={{ color: '#ff8a80' }}>${summary?.totalFinancialRisk ?? 0}M</strong></div>
+        <div><span>Current Success Rate</span><strong>{current?.strategySuccessRate ?? 0}%</strong></div>
+        <div><span>Success with Correction</span><strong className="drift-positive" style={{ color: 'var(--status-good)' }}>{corrected?.strategySuccessRate ?? 0}%</strong></div>
       </div>
 
-      {hotspots.slice(0, 4).map((team) => (
-        <div className="drift-row" key={team.id}>
-          <div>
-            <strong>{team.name}</strong>
-            <span>{team.department} · {team.quadrant.replace('-', ' ')}</span>
-          </div>
-          <div className="drift-metrics">
-            <span>{team.alignmentScore}% aligned</span>
-            <span>{team.weeksToCritical} weeks to critical</span>
-            <button
-              className="apply-btn"
-              disabled={correctingTeamId === team.id}
-              onClick={() => onAutoCorrect?.(team.id)}
-            >
-              {correctingTeamId === team.id ? 'Correcting…' : 'Auto-correct'}
-            </button>
-          </div>
+      {/* Scenario Comparisons Cards (Counterfactuals) */}
+      <div className="counterfactual-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', margin: '16px 0' }}>
+        <div className="glass-card counterfactual-card" style={{ borderLeft: '3px solid #ff5252' }}>
+          <h4 style={{ fontSize: '11px', color: 'var(--text-muted)' }}>IF WE DO NOTHING (12 WKS)</h4>
+          <strong style={{ fontSize: '24px', color: '#ff5252' }}>${(summary?.totalFinancialRisk * 1.8 || 0).toFixed(1)}M Risk</strong>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+            Alignment falls to {impactModel?.scenarios?.withoutIntervention?.alignment || 0}%. Strategy success rate drops to {impactModel?.scenarios?.withoutIntervention?.strategySuccessRate || 0}%.
+          </p>
         </div>
-      ))}
+        <div className="glass-card counterfactual-card" style={{ borderLeft: '3px solid var(--status-good)' }}>
+          <h4 style={{ fontSize: '11px', color: 'var(--text-muted)' }}>WITH AUTONOMOUS CORRECTION</h4>
+          <strong style={{ fontSize: '24px', color: 'var(--status-good)' }}>${(summary?.totalFinancialRisk * 0.3 || 0).toFixed(1)}M Risk</strong>
+          <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+            Alignment recovers to {impactModel?.scenarios?.withIntervention?.alignment || 0}%. Strategy success rate reaches {impactModel?.scenarios?.withIntervention?.strategySuccessRate || 0}%.
+          </p>
+        </div>
+      </div>
 
-      <div className="scenario-lab" aria-label="Employee understanding simulation">
+      <div style={{ marginTop: '16px' }}>
+        <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '12px', color: 'var(--text-primary)' }}>Targeted Hotspot Interventions</h3>
+        {hotspots.slice(0, 4).map((team) => {
+          const needsEscalation = team.alignmentScore < 55 || team.driftVelocity < -2;
+          
+          return (
+            <div className="drift-row" key={team.id} style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '16px', marginBottom: '12px', borderLeft: needsEscalation ? '3px solid #ff5252' : '3px solid var(--status-at-risk)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <div>
+                  <strong>{team.name}</strong>
+                  <span style={{ marginLeft: '10px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    {team.department} · {team.quadrant.replace('-', ' ')}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  {needsEscalation && (
+                    <span className="escalation-badge" style={{ background: 'rgba(244,67,54,0.12)', border: '1px solid rgba(244,67,54,0.35)', color: '#ff5252', padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: '700' }}>
+                      ⚠ ESCALATION TRIGGERED
+                    </span>
+                  )}
+                  <span style={{ fontSize: '13px', color: getStatusStyles(team.alignmentScore).color }}>{team.alignmentScore}% aligned</span>
+                  <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{team.weeksToCritical ? `${team.weeksToCritical} wks to critical` : 'Stable'}</span>
+                  <button
+                    className="apply-btn"
+                    disabled={correctingTeamId === team.id}
+                    onClick={() => onAutoCorrect?.(team.id)}
+                    style={{ padding: '4px 10px', fontSize: '12px' }}
+                  >
+                    {correctingTeamId === team.id ? 'Correcting…' : 'Auto-correct'}
+                  </button>
+                </div>
+              </div>
+              
+              {/* Micro-correction nudge helper */}
+              <div className="micro-correction-nudge" style={{ background: 'rgba(255,255,255,0.02)', padding: '8px 12px', borderRadius: '6px', fontSize: '12px', border: '1px dashed rgba(255,255,255,0.08)' }}>
+                💡 <strong>Targeted correction:</strong> {getMicroCorrectionNudge(team.name)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="scenario-lab" aria-label="Employee understanding simulation" style={{ marginTop: '20px' }}>
         <div>
-          <strong>Understanding scenario lab</strong>
+          <strong>Understanding Scenario Lab</strong>
           <span>Test how role-targeted communication changes execution risk.</span>
         </div>
         <div className="scenario-controls">
@@ -67,11 +129,12 @@ const DriftIntelligence = ({ driftData, impactModel, onAutoCorrect, correctingTe
           </button>
         </div>
         {simulation && (
-          <p className="scenario-result">
-            {simulation.simulatedAlignment}% alignment · {simulation.executionProbability}% execution probability · ${simulation.financialRisk}M at risk. {simulation.interpretation}
+          <p className="scenario-result" style={{ background: 'rgba(0,198,255,0.05)', border: '1px solid rgba(0,198,255,0.2)', padding: '10px', borderRadius: '6px', fontSize: '13px', marginTop: '12px' }}>
+            📊 <strong>Simulated Alignment:</strong> {simulation.simulatedAlignment}% alignment · <strong>Exec Probability:</strong> {simulation.executionProbability}% · <strong>Risk:</strong> ${simulation.financialRisk}M. {simulation.interpretation}
           </p>
         )}
       </div>
+
     </section>
   );
 };

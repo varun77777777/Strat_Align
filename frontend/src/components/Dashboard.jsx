@@ -7,6 +7,8 @@ import RecommendationsPanel from './RecommendationsPanel';
 import TrendChart from './TrendChart';
 import HistogramChart from './HistogramChart';
 import DriftIntelligence from './DriftIntelligence';
+import CausalReasoningReport from './CausalReasoningReport';
+import NetworkIntelligenceGraph from './NetworkIntelligenceGraph';
 import { generateDashboardPDF } from '../services/pdfExport';
 import {
   getTeams,
@@ -18,7 +20,10 @@ import {
   applyRecommendation,
   autoCorrectTeam,
   simulateUnderstanding,
+  getCausalReport,
+  getNetworkGraph,
 } from '../api';
+
 
 // ─── Skeleton card placeholders ────────────────────────────────────────────────
 const KPISkeleton = () => (
@@ -56,21 +61,20 @@ const WorkspaceSidebar = ({ activeSection, onNavigate }) => (
       className="workspace-nav"
       data-active-section={activeSection}
       onClick={(event) => {
+        event.preventDefault();
         const link = event.target.closest('a[href^="#"]');
         const sectionId = link?.getAttribute('href')?.slice(1);
         if (sectionId) onNavigate(sectionId);
       }}
     >
-      <a className="nav-item active" href="#overview"><span>⌂</span> Overview</a>
-      <a className="nav-item" href="#teams"><span>◫</span> Teams</a>
-      <a className="nav-item" href="#drift"><span>⌁</span> Drift radar</a>
-      <a className="nav-item" href="#forecasts"><span>◔</span> Forecasts</a>
-      <a className="nav-item" href="#interventions"><span>✦</span> Interventions</a>
+      <a className={`nav-item ${activeSection === 'overview' ? 'active' : ''}`} href="#overview"><span>⌂</span> Overview</a>
+      <a className={`nav-item ${activeSection === 'causal' ? 'active' : ''}`} href="#causal"><span>🔍</span> Causal Reasoning</a>
+      <a className={`nav-item ${activeSection === 'network' ? 'active' : ''}`} href="#network"><span>🕸</span> Network Graph</a>
     </nav>
-    <div className="sidebar-help">
+    <div className="sidebar-help" style={{ marginTop: '20px' }}>
       <span>✦</span>
-      <strong>Alignment pulse</strong>
-      <p>Check high-risk teams and decide what to correct next.</p>
+      <strong>Decision moat</strong>
+      <p>Analyze casual chains and network maps to bypass broken communication chains.</p>
     </div>
     <div className="sidebar-user"><span className="avatar">SL</span><span><strong>Strategy Lead</strong><small>Executive workspace</small></span></div>
   </aside>
@@ -105,6 +109,8 @@ const Dashboard = () => {
   const [trendData, setTrendData] = useState([]);
   const [driftData, setDriftData] = useState(null);
   const [impactModel, setImpactModel] = useState(null);
+  const [causalData, setCausalData] = useState(null);
+  const [networkData, setNetworkData] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -134,13 +140,15 @@ const Dashboard = () => {
   const fetchData = useCallback(async (isInitial = false) => {
     try {
       if (isInitial) setLoading(true);
-      const [teamsData, predictionsData, recsData, historyData, driftRes, impactRes] = await Promise.all([
+      const [teamsData, predictionsData, recsData, historyData, driftRes, impactRes, causalRes, networkRes] = await Promise.all([
         getTeams(),
         getPredictions(),
         getRecommendations(),
         getAlignmentHistory(7),
         getDriftHotspots(),
         getImpactModel(),
+        getCausalReport(),
+        getNetworkGraph(),
       ]);
 
       if (teamsData?.success) setTeams(teamsData.data ?? []);
@@ -149,6 +157,8 @@ const Dashboard = () => {
       if (historyData?.success) setTrendData(historyData.data ?? []);
       if (driftRes?.success) setDriftData(driftRes.data);
       if (impactRes?.success) setImpactModel(impactRes.data);
+      if (causalRes?.success) setCausalData(causalRes.data);
+      if (networkRes?.success) setNetworkData(networkRes.data);
 
       setError(null);
       setLastUpdated(new Date());
@@ -159,6 +169,7 @@ const Dashboard = () => {
       if (isInitial) setLoading(false);
     }
   }, []);
+
 
   // Poll at a stable interval. Keeping this effect independent of request
   // state prevents a failed request from immediately starting another one.
@@ -353,44 +364,65 @@ const Dashboard = () => {
       />
 
       {/* Main Dashboard Layout */}
-      <div className="dashboard-layout">
-        {/* Main Column */}
-        <div className="main-column">
-          <section id="teams" className="workspace-section">
-            <TeamHeatmap teams={teams} onTeamClick={handleTeamClick} />
-          </section>
-          <section id="drift" className="workspace-section">
-            <DriftIntelligence
-              driftData={driftData}
-              impactModel={impactModel}
-              onAutoCorrect={handleAutoCorrect}
-              correctingTeamId={correctingTeamId}
-              teams={teams}
-              simulation={simulation}
-              simulating={simulating}
-              onSimulate={handleSimulation}
-            />
-          </section>
-          <section id="forecasts" className="workspace-section workspace-section-stack">
-            <TrendChart trendData={trendData} />
-            <HistogramChart riskData={predictions} />
-            <RiskForecast predictions={predictions} />
-          </section>
-        </div>
+      {activeSection === 'overview' && (
+        <div className="dashboard-layout">
+          {/* Main Column */}
+          <div className="main-column">
+            <section id="teams" className="workspace-section">
+              <TeamHeatmap teams={teams} onTeamClick={handleTeamClick} />
+            </section>
+            <section id="drift" className="workspace-section">
+              <DriftIntelligence
+                driftData={driftData}
+                impactModel={impactModel}
+                onAutoCorrect={handleAutoCorrect}
+                correctingTeamId={correctingTeamId}
+                teams={teams}
+                simulation={simulation}
+                simulating={simulating}
+                onSimulate={handleSimulation}
+              />
+            </section>
+            <section id="forecasts" className="workspace-section workspace-section-stack">
+              <TrendChart trendData={trendData} />
+              <HistogramChart riskData={predictions} />
+              <RiskForecast predictions={predictions} />
+            </section>
+          </div>
 
-        {/* Side Column */}
-        <div className="side-column">
-          <section id="interventions" className="workspace-section">
-            <RecommendationsPanel
-              recommendations={recommendations}
-              teams={teams}
-              onApplyRecommendation={handleApplyRecommendation}
-              applyingId={applyingId}
-              appliedSmartIds={appliedSmartIds}
-            />
-          </section>
+          {/* Side Column */}
+          <div className="side-column">
+            <section id="interventions" className="workspace-section">
+              <RecommendationsPanel
+                recommendations={recommendations}
+                teams={teams}
+                onApplyRecommendation={handleApplyRecommendation}
+                applyingId={applyingId}
+                appliedSmartIds={appliedSmartIds}
+              />
+            </section>
+          </div>
         </div>
-      </div>
+      )}
+
+      {activeSection === 'causal' && (
+        <div className="dashboard-layout-full">
+          <CausalReasoningReport causalData={causalData} />
+        </div>
+      )}
+
+      {activeSection === 'network' && (
+        <div className="dashboard-layout-full">
+          <NetworkIntelligenceGraph
+            networkData={networkData}
+            onNodeClick={(node) => {
+              // Direct navigation fallback or node details expansion
+              console.log('Selected node:', node);
+            }}
+          />
+        </div>
+      )}
+
       </main>
     </div>
   );

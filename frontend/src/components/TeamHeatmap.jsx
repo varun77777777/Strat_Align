@@ -69,47 +69,64 @@ const TeamHeatmap = ({ teams = [], onTeamClick }) => {
         {teams.map((team) => {
           const styles = getStatusStyles(team.alignmentScore);
           return (
-            <div 
-              key={team.id || team._id} 
-              className="heatmap-row"
-              onClick={() => onTeamClick(team)}
-            >
-              <div className="team-info">
-                <span className="team-name">{team.name}</span>
-                <span className="team-dept">{team.department}</span>
-              </div>
-              
-              <div className="team-leader">
-                {team.leader}
+              <div 
+                key={team.id || team._id} 
+                className="heatmap-row tooltip-container"
+                onClick={() => onTeamClick(team)}
+              >
+                {/* Strategic Root-Cause Tooltip */}
+                {team.rootCauseSummary && (
+                  <div className="heatmap-tooltip">
+                    <div className="tooltip-title">🔍 Causal Diagnosis: {team.name}</div>
+                    <p className="tooltip-summary">"{team.rootCauseSummary}"</p>
+                    <div className="tooltip-metrics">
+                      <span><strong>Metric:</strong> {team.deviationMetric || 'Alignment'}</span>
+                      <span><strong>Confidence:</strong> {team.rootCauseConfidence || 75}%</span>
+                      {team.forecastRevenueMiss > 0 && (
+                        <span style={{ color: '#ff8a80' }}><strong>Risk:</strong> ${team.forecastRevenueMiss}M</span>
+                      )}
+                    </div>
+                    <div className="tooltip-footer">Click to view deep-dive causal reasoning report</div>
+                  </div>
+                )}
+
+                <div className="team-info">
+                  <span className="team-name">{team.name}</span>
+                  <span className="team-dept">{team.department}</span>
+                </div>
+                
+                <div className="team-leader">
+                  {team.leader}
+                </div>
+
+                <div className="score-bar-container">
+                  <div 
+                    className="score-bar-fill" 
+                    style={{ 
+                      width: `${team.alignmentScore}%`,
+                      background: styles.barColor
+                    }}
+                  />
+                </div>
+
+                <div className="score-value" style={{ color: styles.color }}>
+                  {team.alignmentScore}% {getTrendIcon(team.trend)}
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <span 
+                    className="status-badge"
+                    style={{
+                      background: styles.bg,
+                      border: styles.border,
+                      color: styles.color
+                    }}
+                  >
+                    {styles.text}
+                  </span>
+                </div>
               </div>
 
-              <div className="score-bar-container">
-                <div 
-                  className="score-bar-fill" 
-                  style={{ 
-                    width: `${team.alignmentScore}%`,
-                    background: styles.barColor
-                  }}
-                />
-              </div>
-
-              <div className="score-value" style={{ color: styles.color }}>
-                {team.alignmentScore}% {getTrendIcon(team.trend)}
-              </div>
-
-              <div style={{ textAlign: 'right' }}>
-                <span 
-                  className="status-badge"
-                  style={{
-                    background: styles.bg,
-                    border: styles.border,
-                    color: styles.color
-                  }}
-                >
-                  {styles.text}
-                </span>
-              </div>
-            </div>
           );
         })}
       </div>
