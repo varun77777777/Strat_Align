@@ -51,6 +51,22 @@ async function callGemini (prompt) {
   }
 }
 
+async function callStrategyAnalyzer (strategy, communications) {
+  const predictionUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000/predict';
+  const url = process.env.AI_ANALYSIS_URL || predictionUrl.replace(/\/predict$/, '/analyze');
+
+  try {
+    const { data } = await axios.post(url, {
+      strategy: strategy || 'No strategy document was provided.',
+      communications: Array.isArray(communications) ? communications : [String(communications || '')],
+    }, { timeout: parseInt(process.env.AI_SERVICE_TIMEOUT || '5000', 10) });
+    return data;
+  } catch (err) {
+    console.warn('[analyze] AI service unavailable, using local deterministic fallback:', err.message);
+    return null;
+  }
+}
+
 // ── GET /api/recommendations ──────────────────────────────────────────────────
 // Returns all recommendations across all teams, sorted by priority.
 router.get('/', async (req, res, next) => {
@@ -180,7 +196,8 @@ router.post('/analyze', async (req, res, next) => {
 
     // Build Gemini prompt
     const prompt = buildAnalysisPrompt(team, strategy_doc, communications);
-    const aiResult = await callGemini(prompt);
+    const geminiResult = await callGemini(prompt);
+    const aiResult = geminiResult || await callStrategyAnalyzer(strategy_doc, communications);
 
     let analysis;
     if (aiResult) {
@@ -188,9 +205,9 @@ router.post('/analyze', async (req, res, next) => {
         alignmentScore:  clamp(aiResult.alignmentScore ?? team.alignmentScore, 0, 100),
         understanding:   clamp(aiResult.understanding  ?? team.understanding,  0, 100),
         driftSignals:    aiResult.driftSignals || [],
-        recommendations: aiResult.recommendations || [],
+        recommendations: aiResult.recommendations || defaultRecommendations(),
         summary:         aiResult.summary || '',
-        source:          'gemini',
+        source:          geminiResult ? 'gemini' : 'ai-service',
       };
     } else {
       // Deterministic mock
@@ -265,14 +282,18 @@ function mockAnalysis (team) {
     alignmentScore:  Math.max(0, Math.min(100, base + Math.round((Math.random() - 0.5) * 10))),
     understanding:   Math.max(0, Math.min(100, team.understanding + Math.round((Math.random() - 0.5) * 8))),
     driftSignals:    drift,
-    recommendations: [
-      'Hold bi-weekly strategy Q&A sessions',
-      'Share OKR progress in team standups',
-      'Align project backlog to strategic pillars',
-    ],
+    recommendations: defaultRecommendations(),
     summary: `Mock analysis for ${team.name}. Real analysis requires a valid Gemini API key.`,
     source:  'mock',
   };
+}
+
+function defaultRecommendations () {
+  return [
+    'Hold bi-weekly strategy Q&A sessions',
+    'Share OKR progress in team standups',
+    'Align project backlog to strategic pillars',
+  ];
 }
 
 function clamp (val, min, max) {

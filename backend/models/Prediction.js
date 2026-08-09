@@ -29,7 +29,7 @@ const PredictionSchema = new mongoose.Schema({
   riskScore:      { type: Number, min: 0, max: 100, default: 50 },
   weeksToFailure: { type: Number, min: 0, default: null }, // null = no immediate risk
   confidence:     { type: Number, min: 0, max: 1, default: 0.75 },
-  source:         { type: String, enum: ['ai', 'mock', 'manual'], default: 'mock' },
+  source:         { type: String, enum: ['ai', 'mock', 'manual', 'ibm-scenario'], default: 'mock' },
 
   recommendations: { type: [RecommendationSchema], default: [] },
 

@@ -6,13 +6,17 @@ import RiskForecast from './RiskForecast';
 import RecommendationsPanel from './RecommendationsPanel';
 import TrendChart from './TrendChart';
 import HistogramChart from './HistogramChart';
+import DriftIntelligence from './DriftIntelligence';
 import { generateDashboardPDF } from '../services/pdfExport';
 import {
   getTeams,
   getPredictions,
   getRecommendations,
   getAlignmentHistory,
+  getDriftHotspots,
+  getImpactModel,
   applyRecommendation,
+  autoCorrectTeam,
 } from '../api';
 
 // ─── Skeleton card placeholders ────────────────────────────────────────────────
@@ -52,10 +56,13 @@ const Dashboard = () => {
   const [predictions, setPredictions] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [trendData, setTrendData] = useState([]);
+  const [driftData, setDriftData] = useState(null);
+  const [impactModel, setImpactModel] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [applyingId, setApplyingId] = useState(null);
+  const [correctingTeamId, setCorrectingTeamId] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [exporting, setExporting] = useState(false);
   const [toast, setToast] = useState(null);
@@ -77,17 +84,21 @@ const Dashboard = () => {
   const fetchData = useCallback(async (isInitial = false) => {
     try {
       if (isInitial) setLoading(true);
-      const [teamsData, predictionsData, recsData, historyData] = await Promise.all([
+      const [teamsData, predictionsData, recsData, historyData, driftRes, impactRes] = await Promise.all([
         getTeams(),
         getPredictions(),
         getRecommendations(),
         getAlignmentHistory(7),
+        getDriftHotspots(),
+        getImpactModel(),
       ]);
 
       if (teamsData?.success) setTeams(teamsData.data ?? []);
       if (predictionsData?.success) setPredictions(predictionsData.data ?? []);
       if (recsData?.success) setRecommendations(recsData.data ?? []);
       if (historyData?.success) setTrendData(historyData.data ?? []);
+      if (driftRes?.success) setDriftData(driftRes.data);
+      if (impactRes?.success) setImpactModel(impactRes.data);
 
       setError(null);
       setLastUpdated(new Date());
@@ -136,6 +147,21 @@ const Dashboard = () => {
       showToast('❌ Could not apply recommendation. Please try again.', 'error');
     } finally {
       setApplyingId(null);
+    }
+  };
+
+  const handleAutoCorrect = async (teamId) => {
+    try {
+      setCorrectingTeamId(teamId);
+      const res = await autoCorrectTeam(teamId);
+      if (!res?.success) throw new Error('Correction could not be applied');
+      showToast(`Autonomous correction started for ${res.data.teamName}.`, 'success');
+      fetchData(false);
+    } catch (err) {
+      console.error('Autonomous correction failed:', err);
+      showToast('Could not start autonomous correction. Please try again.', 'error');
+    } finally {
+      setCorrectingTeamId(null);
     }
   };
 
@@ -245,6 +271,12 @@ const Dashboard = () => {
         {/* Main Column */}
         <div className="main-column">
           <TeamHeatmap teams={teams} onTeamClick={handleTeamClick} />
+          <DriftIntelligence
+            driftData={driftData}
+            impactModel={impactModel}
+            onAutoCorrect={handleAutoCorrect}
+            correctingTeamId={correctingTeamId}
+          />
           <TrendChart trendData={trendData} />
           <HistogramChart riskData={predictions} />
           <RiskForecast predictions={predictions} />

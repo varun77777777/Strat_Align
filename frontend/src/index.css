@@ -119,6 +119,33 @@ body {
   box-shadow: 0 12px 40px 0 rgba(102, 126, 234, 0.15);
 }
 
+.drift-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.drift-summary-grid > div, .drift-row {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+}
+
+.drift-summary-grid > div { padding: 12px; }
+.drift-summary-grid span, .drift-row span { display: block; color: var(--text-secondary); font-size: 11px; }
+.drift-summary-grid strong { display: block; margin-top: 4px; font-size: 18px; }
+.drift-positive { color: var(--status-good); }
+
+.drift-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; margin-top: 8px; }
+.drift-metrics { display: flex; align-items: center; gap: 12px; text-align: right; }
+
+@media (max-width: 720px) {
+  .drift-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .drift-row, .drift-metrics { align-items: flex-start; flex-direction: column; }
+  .drift-metrics { text-align: left; }
+}
+
 /* Glass Header / Navbar */
 .glass-navbar {
   display: flex;

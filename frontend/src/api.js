@@ -35,6 +35,21 @@ export const getAlignmentHistory = async (days = 7) => {
   return response.data;
 };
 
+export const getDriftHotspots = async () => {
+  const response = await api.get('/drift/hotspots');
+  return response.data;
+};
+
+export const getImpactModel = async () => {
+  const response = await api.get('/drift/impact-model');
+  return response.data;
+};
+
+export const autoCorrectTeam = async (teamId) => {
+  const response = await api.post('/drift/auto-correct', { teamId });
+  return response.data;
+};
+
 export const applyRecommendation = async (id) => {
   const response = await api.post(`/recommendations/${id}/apply`);
   return response.data;

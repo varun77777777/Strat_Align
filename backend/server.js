@@ -14,6 +14,7 @@ const rateLimit   = require('express-rate-limit');
 const teamsRouter           = require('./routes/teams');
 const predictionsRouter     = require('./routes/predictions');
 const recommendationsRouter = require('./routes/recommendations');
+const driftRouter           = require('./routes/drift');
 
 // ── Seed ──────────────────────────────────────────────────────────────────────
 const { seed } = require('./seed');
@@ -91,6 +92,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/teams',           teamsRouter);
 app.use('/api/predictions',     predictionsRouter);
 app.use('/api/recommendations', recommendationsRouter);
+app.use('/api/drift',           driftRouter);
 
 // Convenience alias — POST /api/analyze maps to recommendations router
 app.post('/api/analyze', (req, res, next) => {
@@ -117,8 +119,13 @@ app.get('/', (_req, res) => {
       'GET  /api/predictions',
       'GET  /api/recommendations',
       'GET  /api/alignment-history',
+      'GET  /api/drift/hotspots',
+      'GET  /api/drift/impact-model',
+      'GET  /api/drift/strategy-context',
       'POST /api/analyze',
       'POST /api/recommendations/:id/apply',
+      'POST /api/drift/simulate-understanding',
+      'POST /api/drift/auto-correct',
     ],
   });
 });
@@ -234,10 +241,17 @@ async function startServer () {
   mongoose.connection.on('disconnected', () => console.warn('[db] Disconnected'));
   mongoose.connection.on('reconnected', () => console.log('[db] Reconnected'));
 
-  // Auto-seed if DB is connected and empty
+  // Seed the demo scenario only for a new database.  Restarting the service
+  // must preserve analyses and autonomous corrections already recorded.
   if (mongoose.connection.readyState === 1) {
     try {
-      await seed();
+      const Team = require('./models/Team');
+      const teamCount = await Team.countDocuments();
+      if (teamCount === 0) {
+        await seed();
+      } else {
+        console.log(`[seed] Existing scenario retained (${teamCount} teams)`);
+      }
     } catch (err) {
       console.error('[seed] Failed:', err.message);
     }

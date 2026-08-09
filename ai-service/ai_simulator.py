@@ -49,6 +49,17 @@ STRATEGY_KEYWORDS = [
     "customer", "retention", "acquisition", "velocity", "efficiency",
 ]
 
+# Terms that carry little strategic meaning on their own.  The fallback model
+# extracts the remaining terms from the supplied strategy so it can evaluate
+# a public-company strategy without requiring a vendor API key.
+STRATEGY_STOPWORDS = {
+    "about", "across", "after", "along", "also", "and", "are", "around",
+    "because", "before", "between", "business", "company", "deliver", "for",
+    "from", "into", "its", "more", "must", "our", "over", "prioritize",
+    "should", "that", "the", "their", "this", "through", "to", "with",
+    "will", "while",
+}
+
 DRIFT_PHRASES = [
     "not sure", "unclear", "confused about", "don't understand",
     "no idea", "what strategy", "hasn't been communicated",
@@ -86,7 +97,16 @@ def _extract_strategy_keywords(strategy: str) -> List[str]:
     for kw in STRATEGY_KEYWORDS:
         if kw.lower() in lower:
             found.append(kw)
-    return list(set(found))[:10]
+
+    # Add the strategy's own material terms (for example "watsonx",
+    # "hybrid cloud", or a product/market name) rather than judging every
+    # company with a static, generic vocabulary.
+    for token in re.findall(r"[a-zA-Z][a-zA-Z0-9-]{2,}", lower):
+        if token not in STRATEGY_STOPWORDS and token not in {term.lower() for term in found}:
+            found.append(token)
+
+    # Preserve source order for deterministic results and a readable UI.
+    return list(dict.fromkeys(found))[:20]
 
 
 def _extract_drift_signals(texts: List[str]) -> List[str]:
@@ -104,20 +124,26 @@ def _mock_analyze(strategy: str, communications: List[str]) -> Dict[str, Any]:
     Alignment = function of keyword overlap between strategy and communications.
     """
     strat_keywords  = _extract_strategy_keywords(strategy)
-    mention_count   = _count_keyword_mentions(communications, strat_keywords)
-    total_comms     = max(len(communications), 1)
-    mention_rate    = min(1.0, mention_count / (total_comms * 2))
-
-    # Base alignment from keyword density
-    strat_density   = len(strat_keywords) / max(len(strategy.split()), 1)
-    base_alignment  = min(85.0, 30.0 + strat_density * 300 + mention_rate * 40)
-
-    # Noise from content seed (deterministic)
-    seed_noise      = (_deterministic_seed(strategy[:50]) - 0.5) * 10
-    alignment_score = round(float(max(10.0, min(95.0, base_alignment + seed_noise))), 1)
-    understanding   = round(float(min(95.0, alignment_score + mention_rate * 15)), 1)
+    mention_count = _count_keyword_mentions(communications, strat_keywords)
+    total_comms   = max(len(communications), 1)
+    mention_rate  = min(1.0, sum(
+        1 for text in communications
+        if any(keyword.lower() in text.lower() for keyword in strat_keywords)
+    ) / total_comms)
+    term_coverage = mention_count / max(len(strat_keywords), 1)
 
     drift_signals   = _extract_drift_signals(communications)
+    positive_count  = sum(
+        1 for phrase in POSITIVE_SIGNALS
+        if phrase in " ".join(communications).lower()
+    )
+    # Alignment is driven by evidence that the team's language reflects the
+    # supplied strategy, not by the strategy document's keyword density.
+    raw_score = 20 + term_coverage * 65 + mention_rate * 10 + min(5, positive_count * 2)
+    raw_score -= min(30, len(drift_signals) * 12)
+    alignment_score = round(float(max(5.0, min(95.0, raw_score))), 1)
+    understanding   = round(float(min(95.0, alignment_score + term_coverage * 10)), 1)
+
     if not drift_signals and alignment_score < 55:
         drift_signals = ["Low strategy keyword presence in team communications"]
 
