@@ -3,15 +3,13 @@
 
 const express    = require('express');
 const mongoose   = require('mongoose');
-const NodeCache  = require('node-cache');
 const Team       = require('../models/Team');
 const Prediction = require('../models/Prediction');
+const cache      = require('../cache');
 
 const router = express.Router();
 
 // ── Cache ─────────────────────────────────────────────────────────────────────
-const TTL   = parseInt(process.env.CACHE_TTL_TEAMS || '10', 10);
-const cache = new NodeCache({ stdTTL: TTL, checkperiod: 15 });
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -41,6 +39,11 @@ router.get('/', async (req, res, next) => {
       trend:           t.trend,
       status:          t.status,
       updatedAt:       t.updatedAt,
+      lastUpdated:     t.updatedAt,
+      executionProbability: t.executionProbability,
+      driftVelocity:   t.driftVelocity,
+      financialRisk:   t.financialRisk,
+      isDriftHotspot:  t.isDriftHotspot,
     }));
 
     cache.set(cacheKey, result);

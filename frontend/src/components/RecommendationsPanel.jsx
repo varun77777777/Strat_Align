@@ -77,10 +77,10 @@ const complexityColor = {
   Hard: '#F44336',
 };
 
-const RecommendationsPanel = ({ recommendations = [], teams = [], onApplyRecommendation, applyingId }) => {
+const RecommendationsPanel = ({ recommendations = [], teams = [], onApplyRecommendation, applyingId, appliedSmartIds = [] }) => {
   const allRecommendations = useMemo(
-    () => generateSmartRecommendations(teams, recommendations),
-    [teams, recommendations]
+    () => generateSmartRecommendations(teams, recommendations, appliedSmartIds),
+    [teams, recommendations, appliedSmartIds]
   );
 
   const pendingCount = allRecommendations.filter(r => !r.applied).length;
@@ -213,6 +213,7 @@ RecommendationsPanel.propTypes = {
   })),
   onApplyRecommendation: PropTypes.func,
   applyingId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  appliedSmartIds: PropTypes.arrayOf(PropTypes.string),
 };
 
 RecommendationsPanel.defaultProps = {
@@ -220,6 +221,7 @@ RecommendationsPanel.defaultProps = {
   teams: [],
   onApplyRecommendation: undefined,
   applyingId: null,
+  appliedSmartIds: [],
 };
 
 export default RecommendationsPanel;

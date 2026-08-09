@@ -3,12 +3,11 @@
 
 const express    = require('express');
 const mongoose   = require('mongoose');
-const NodeCache  = require('node-cache');
 const Team       = require('../models/Team');
 const Prediction = require('../models/Prediction');
+const cache      = require('../cache');
 
 const router = express.Router();
-const cache  = new NodeCache({ stdTTL: 30, checkperiod: 60 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // GET /api/drift/hotspots
@@ -224,7 +223,11 @@ router.post('/simulate-understanding', async (req, res, next) => {
       return res.status(404).json({ success: false, error: 'Team not found' });
     }
 
-    const pct = Math.max(0, Math.min(100, Number(informedPercent)));
+    const requestedPercent = Number(informedPercent);
+    if (!Number.isFinite(requestedPercent)) {
+      return res.status(400).json({ success: false, error: 'informedPercent must be a number between 0 and 100' });
+    }
+    const pct = Math.max(0, Math.min(100, requestedPercent));
 
     // Simulate alignment score based on informed percent
     // Baseline: random employees → ~30% alignment
@@ -232,7 +235,10 @@ router.post('/simulate-understanding', async (req, res, next) => {
     const baseScore    = 25;
     const maxScore     = 92;
     const simAlignment = Math.round(baseScore + (pct / 100) * (maxScore - baseScore));
-    const simUnderstanding = Math.round(simAlignment + (Math.random() * 6 - 3));
+    // Keep the demo repeatable: a given team and informed percentage must
+    // yield the same scenario result so decision-makers can compare runs.
+    const teamOffset = [...String(team._id)].reduce((total, char) => total + char.charCodeAt(0), 0) % 7 - 3;
+    const simUnderstanding = Math.round(simAlignment + teamOffset);
 
     // Drift signals based on uninformed employees
     const uninformedPct = 100 - pct;
@@ -343,17 +349,21 @@ router.post('/auto-correct', async (req, res, next) => {
       return res.status(404).json({ success: false, error: 'Team not found' });
     }
 
-    // Simulate autonomous correction: boost alignment 5-15 points
-    const correctionImpact = team.alignmentScore < 50 ? 12 : 7;
-    const newAlignment     = Math.min(100, team.alignmentScore + correctionImpact);
-    const newUnderstanding = Math.min(100, team.understanding + correctionImpact * 0.8);
+    // Simulate autonomous correction: boost alignment while accurately
+    // reporting the realised impact when a score is already near 100.
+    const previousAlignment = team.alignmentScore;
+    const plannedImpact     = previousAlignment < 50 ? 12 : 7;
+    const newAlignment      = Math.min(100, previousAlignment + plannedImpact);
+    const correctionImpact  = newAlignment - previousAlignment;
+    const newUnderstanding  = Math.min(100, team.understanding + correctionImpact * 0.8);
 
     team.addAlignmentPoint(newAlignment, newUnderstanding, team.projectVelocity);
     await team.save();
+    // Force the next forecast to use the corrected alignment snapshot.
+    await Prediction.deleteOne({ teamId });
 
     // Invalidate caches
-    cache.del('drift_hotspots');
-    cache.del('impact_model');
+    cache.del(['drift_hotspots', 'impact_model', 'teams_list', 'predictions_all', 'recommendations_all', 'alignment_history', `team_${teamId}`]);
 
     const actions = getAutoCorrectionActions(team.department, team.alignmentScore);
 
@@ -362,11 +372,13 @@ router.post('/auto-correct', async (req, res, next) => {
       data: {
         teamId,
         teamName:         team.name,
-        previousAlignment: team.alignmentScore - correctionImpact,
+        previousAlignment,
         newAlignment,
         correctionImpact,
         autonomousActions: actions,
-        estimatedRecovery: `${Math.ceil((80 - newAlignment) / 2)} weeks to healthy alignment`,
+        estimatedRecovery: newAlignment >= 80
+          ? 'Healthy alignment threshold reached'
+          : `${Math.ceil((80 - newAlignment) / 2)} weeks to healthy alignment`,
         message: `Autonomous correction applied to ${team.name}. ${correctionImpact} point alignment boost initiated.`,
       },
     });

@@ -23,7 +23,10 @@ import re
 import time
 from typing import List, Tuple, Dict, Any, Optional
 
-import requests
+try:
+    import requests
+except ImportError:  # Offline demo mode: deterministic fallbacks still work.
+    requests = None
 
 logger = logging.getLogger("ai_simulator")
 
@@ -168,6 +171,9 @@ def _mock_analyze(strategy: str, communications: List[str]) -> Dict[str, Any]:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _call_gemini(strategy: str, communications: List[str]) -> Optional[Dict[str, Any]]:
+    if requests is None:
+        logger.info("[gemini] requests package unavailable — using mock fallback")
+        return None
     key = _gemini_key()
     if not key or key == "your_gemini_api_key_here":
         logger.info("[gemini] No API key configured — using mock fallback")
@@ -321,6 +327,9 @@ def _mock_sentiment(texts: List[str]) -> List[Dict[str, Any]]:
 
 
 def _call_huggingface(texts: List[str]) -> Optional[List[Dict[str, Any]]]:
+    if requests is None:
+        logger.info("[hf] requests package unavailable — using mock fallback")
+        return None
     key = _hf_key()
     if not key or key == "your_huggingface_token_here":
         logger.info("[hf] No API key configured — using mock fallback")

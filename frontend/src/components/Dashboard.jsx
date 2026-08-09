@@ -17,6 +17,7 @@ import {
   getImpactModel,
   applyRecommendation,
   autoCorrectTeam,
+  simulateUnderstanding,
 } from '../api';
 
 // ─── Skeleton card placeholders ────────────────────────────────────────────────
@@ -112,6 +113,8 @@ const Dashboard = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [exporting, setExporting] = useState(false);
   const [toast, setToast] = useState(null);
+  const [simulation, setSimulation] = useState(null);
+  const [simulating, setSimulating] = useState(false);
   const [activeSection, setActiveSection] = useState('overview');
   const [appliedSmartIds, setAppliedSmartIds] = useState(() => {
     try {
@@ -151,16 +154,17 @@ const Dashboard = () => {
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
-      setError('Service connection degraded. Retrying…');
+      setError('Dashboard data service is unavailable. Check that the backend is running on port 5000.');
     } finally {
       if (isInitial) setLoading(false);
     }
   }, []);
 
-  // Initial fetch + 5-second polling
+  // Poll at a stable interval. Keeping this effect independent of request
+  // state prevents a failed request from immediately starting another one.
   useEffect(() => {
     fetchData(true);
-    const interval = setInterval(() => fetchData(false), 5000);
+    const interval = setInterval(() => fetchData(false), 30000);
     return () => clearInterval(interval);
   }, [fetchData]);
 
@@ -209,6 +213,20 @@ const Dashboard = () => {
       showToast('Could not start autonomous correction. Please try again.', 'error');
     } finally {
       setCorrectingTeamId(null);
+    }
+  };
+
+  const handleSimulation = async (teamId, informedPercent) => {
+    try {
+      setSimulating(true);
+      const res = await simulateUnderstanding(teamId, informedPercent);
+      if (!res?.success) throw new Error('Simulation could not be completed');
+      setSimulation(res.data);
+    } catch (err) {
+      console.error('Understanding simulation failed:', err);
+      showToast('Could not run the understanding simulation.', 'error');
+    } finally {
+      setSimulating(false);
     }
   };
 
@@ -347,6 +365,10 @@ const Dashboard = () => {
               impactModel={impactModel}
               onAutoCorrect={handleAutoCorrect}
               correctingTeamId={correctingTeamId}
+              teams={teams}
+              simulation={simulation}
+              simulating={simulating}
+              onSimulate={handleSimulation}
             />
           </section>
           <section id="forecasts" className="workspace-section workspace-section-stack">

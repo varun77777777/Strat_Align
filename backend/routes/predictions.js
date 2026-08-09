@@ -3,16 +3,14 @@
 
 const express    = require('express');
 const mongoose   = require('mongoose');
-const NodeCache  = require('node-cache');
 const axios      = require('axios');
 const Team       = require('../models/Team');
 const Prediction = require('../models/Prediction');
+const cache      = require('../cache');
 
 const router = express.Router();
 
 // ── Cache ─────────────────────────────────────────────────────────────────────
-const TTL   = parseInt(process.env.CACHE_TTL_PREDICTIONS || '30', 10);
-const cache = new NodeCache({ stdTTL: TTL, checkperiod: 60 });
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

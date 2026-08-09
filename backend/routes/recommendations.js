@@ -4,13 +4,12 @@
 const express    = require('express');
 const mongoose   = require('mongoose');
 const axios      = require('axios');
-const NodeCache  = require('node-cache');
 const Team       = require('../models/Team');
 const Prediction = require('../models/Prediction');
+const cache      = require('../cache');
 
 const router = express.Router();
 
-const cache = new NodeCache({ stdTTL: 30, checkperiod: 60 });
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -211,7 +210,7 @@ router.post('/analyze', async (req, res, next) => {
       };
     } else {
       // Deterministic mock
-      analysis = mockAnalysis(team);
+      analysis = mockAnalysis(team, strategy_doc, communications);
     }
 
     // Persist updated scores
@@ -229,11 +228,12 @@ router.post('/analyze', async (req, res, next) => {
         },
       },
     });
+    // An analysis changes the team snapshot; an older prediction must not
+    // remain visible for its five-minute freshness window.
+    await Prediction.deleteOne({ teamId: team_id });
 
     // Invalidate team caches
-    cache.del(`team_${team_id}`);
-    cache.del('teams_list');
-    cache.del('predictions_all');
+    invalidateTeamCaches(team_id);
 
     return res.json({ success: true, data: analysis });
 
@@ -272,20 +272,45 @@ ${communications || 'Not provided'}
 Return ONLY valid JSON wrapped in \`\`\`json ... \`\`\` code fences.`;
 }
 
-function mockAnalysis (team) {
-  const base = team.alignmentScore;
-  const drift = base < 50
-    ? ['Misaligned project priorities', 'Low strategy comprehension', 'Siloed communication']
-    : ['Minor terminology drift', 'Infrequent cross-team syncs'];
+function mockAnalysis (team, strategyDoc, communications) {
+  const strategyTerms = extractTerms(strategyDoc || team.strategyDocument || '');
+  const messages = Array.isArray(communications) ? communications : [String(communications || '')];
+  const combined = messages.join(' ').toLowerCase();
+  const mentioned = strategyTerms.filter(term => combined.includes(term));
+  const mentionRate = strategyTerms.length
+    ? mentioned.length / strategyTerms.length
+    : 0;
+  const concernCount = ['not sure', 'unclear', 'confused', 'no idea', 'siloed', 'conflicting priorities']
+    .filter(phrase => combined.includes(phrase)).length;
+  const alignmentScore = clamp(Math.round(25 + mentionRate * 65 - concernCount * 10), 5, 95);
+  const drift = concernCount > 0
+    ? ['Communication comprehension gap', 'Misaligned project priorities']
+    : alignmentScore < 55
+      ? ['Low strategy-term coverage in team communications']
+      : ['No material drift detected in sampled communications'];
 
   return {
-    alignmentScore:  Math.max(0, Math.min(100, base + Math.round((Math.random() - 0.5) * 10))),
-    understanding:   Math.max(0, Math.min(100, team.understanding + Math.round((Math.random() - 0.5) * 8))),
+    alignmentScore,
+    understanding:   clamp(Math.round(alignmentScore + mentionRate * 8), 0, 100),
     driftSignals:    drift,
     recommendations: defaultRecommendations(),
-    summary: `Mock analysis for ${team.name}. Real analysis requires a valid Gemini API key.`,
+    summary: `Offline analysis of ${messages.length} communications found ${mentioned.length} of ${strategyTerms.length} strategy terms.`,
     source:  'mock',
   };
+}
+
+function extractTerms (text) {
+  const stopwords = new Set(['about', 'across', 'and', 'are', 'for', 'from', 'into', 'our', 'that', 'the', 'their', 'this', 'with']);
+  return [...new Set(String(text).toLowerCase().match(/[a-z][a-z0-9-]{3,}/g) || [])]
+    .filter(term => !stopwords.has(term))
+    .slice(0, 20);
+}
+
+function invalidateTeamCaches (teamId) {
+  cache.del([
+    `team_${teamId}`, 'teams_list', 'predictions_all', 'recommendations_all',
+    'alignment_history', 'drift_hotspots', 'impact_model',
+  ]);
 }
 
 function defaultRecommendations () {
