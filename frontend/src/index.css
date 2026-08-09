@@ -1597,8 +1597,8 @@ html { scroll-behavior: smooth; }
 }
 .causal-step-content {
   flex: 1;
-  background: rgba(255, 255, 255, 0.015);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(120, 120, 120, 0.04);
+  border: 1px solid rgba(120, 120, 120, 0.15);
   border-radius: 8px;
   padding: 12px;
 }
@@ -1611,7 +1611,8 @@ html { scroll-behavior: smooth; }
 .causal-step-num {
   font-size: 11px;
   font-weight: 700;
-  color: var(--text-muted);
+  color: inherit;
+  opacity: 0.65;
 }
 .causal-cause-badge {
   font-size: 9px;
@@ -1621,56 +1622,101 @@ html { scroll-behavior: smooth; }
 }
 .causal-confidence-pill {
   font-size: 10px;
-  color: var(--text-secondary);
+  color: inherit;
+  opacity: 0.75;
 }
 .causal-cause-text, .causal-effect-text {
   font-size: 13px;
   margin-top: 4px;
+  color: inherit;
 }
 
 /* Evidence Quotes */
 .evidence-quote-block {
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 8px;
-  padding: 14px;
-  margin-bottom: 10px;
+  background: rgba(120, 120, 120, 0.05);
+  border: 1px solid rgba(120, 120, 120, 0.15);
+  border-left: 3px solid rgba(206, 147, 216, 0.65);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  transition: background 0.2s;
+}
+.evidence-quote-block:hover {
+  background: rgba(120, 120, 120, 0.08);
+  border-left-color: rgba(206, 147, 216, 0.95);
 }
 .evidence-quote-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 11px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
+  gap: 10px;
+  font-size: 12px;
+  color: inherit;
+  opacity: 0.8;
+  margin-bottom: 10px;
   flex-wrap: wrap;
 }
 .evidence-channel {
-  background: rgba(255,255,255,0.05);
-  padding: 1px 6px;
-  border-radius: 4px;
+  background: rgba(206, 147, 216, 0.15);
+  border: 1px solid rgba(206, 147, 216, 0.3);
+  color: #ce93d8;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 .evidence-author {
   font-weight: 700;
-  color: var(--text-primary);
+  font-size: 13px;
+  color: inherit;
 }
 .evidence-role {
-  color: var(--text-muted);
+  color: inherit;
+  opacity: 0.7;
+  font-size: 11px;
+  font-style: italic;
+}
+.evidence-date {
+  margin-left: auto;
+  font-size: 10px;
+  color: inherit;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+.evidence-sentiment-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
 }
 .evidence-quote-text {
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
-  line-height: 1.5;
-  color: #e2e8f0;
+  line-height: 1.7;
+  color: inherit;
+  opacity: 0.95;
+  border: none;
+  margin: 0;
+  padding: 0;
+  quotes: none;
+  letter-spacing: 0.01em;
 }
 .evidence-tags {
   display: flex;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
 }
 .evidence-tag {
   font-size: 10px;
-  color: #90caf9;
+  font-weight: 600;
+  color: #64b5f6;
+  background: rgba(100, 181, 246, 0.12);
+  border: 1px solid rgba(100, 181, 246, 0.25);
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
 }
 
 /* Impact Forecast Banner */
@@ -1717,22 +1763,62 @@ html { scroll-behavior: smooth; }
 
 /* Interventions */
 .intervention-box {
-  background: rgba(255,255,255,0.02);
-  border: 1px dashed rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 16px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(76, 175, 80, 0.25);
+  border-radius: 12px;
+  padding: 20px 22px;
+  position: relative;
+  overflow: hidden;
+}
+.intervention-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #66bb6a, #26a269);
+  border-radius: 12px 0 0 12px;
+}
+.intervention-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #66bb6a;
+  text-transform: uppercase;
+  margin-bottom: 10px;
 }
 .intervention-text {
-  font-size: 14px;
-  line-height: 1.5;
-  color: #e2e8f0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: inherit;
+  opacity: 0.95;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 .intervention-meta {
   display: flex;
-  gap: 16px;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(76, 175, 80, 0.15);
+}
+.intervention-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
+  opacity: 0.85;
+  background: rgba(120, 120, 120, 0.08);
+  border: 1px solid rgba(120, 120, 120, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
 }
 
 /* ── Network Intelligence Dashboard ── */

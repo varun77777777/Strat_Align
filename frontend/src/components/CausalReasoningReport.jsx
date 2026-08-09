@@ -206,13 +206,15 @@ const TeamReasoningCard = ({ report }) => {
           <div className="reasoning-section">
             <div className="reasoning-section-label">RECOMMENDED INTERVENTION</div>
             <div className="intervention-box">
+              <div className="intervention-label">✦ Action Plan</div>
               <div className="intervention-text">{report.interventionRecommendation}</div>
               <div className="intervention-meta">
-                <span>⏱ Recovery: ~{report.estimatedRecoveryWeeks} weeks</span>
-                <span>📊 Exec prob: {report.executionProbability}%</span>
+                <span className="intervention-stat-chip">⏱ Recovery: ~{report.estimatedRecoveryWeeks} weeks</span>
+                <span className="intervention-stat-chip">📊 Exec probability: {report.executionProbability}%</span>
               </div>
             </div>
           </div>
+
         </div>
       )}
     </div>
