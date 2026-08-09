@@ -14,7 +14,7 @@ const RecommendationsList = ({ recommendations = [], onApplyRecommendation, appl
   const displayRecs = recommendations.slice(0, 3);
 
   return (
-    <div className="glass-card" style={{ flex: 1 }}>
+    <div className="glass-card recommendation-list-card" style={{ flex: 1 }}>
       <div className="section-title-bar">
         <h2 className="section-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#764ba2' }}>
@@ -30,7 +30,7 @@ const RecommendationsList = ({ recommendations = [], onApplyRecommendation, appl
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
         
         {/* Slider */}
-        <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.04)', padding: '12px', borderRadius: '8px', marginBottom: '8px' }}>
+        <div className="recommendation-target">
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-secondary)', marginBottom: '6px' }}>
             <span>Projected Target Improvement:</span>
             <span style={{ fontWeight: 'bold', color: '#00c6ff' }}>+{targetImprovement}%</span>

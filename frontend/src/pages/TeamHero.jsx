@@ -47,25 +47,25 @@ const TeamHero = ({ team = {} }) => {
   };
 
   return (
-    <div className="glass-card team-hero-card" style={{ marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+    <div className="glass-card team-hero-card">
+      <div className="team-hero-heading">
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-          <div className="kpi-icon-wrapper" style={{ width: '60px', height: '60px', borderRadius: '14px', background: 'rgba(255,255,255,0.05)', color: '#00c6ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="team-identity">
+          <div className="kpi-icon-wrapper team-hero-icon">
             {getTeamIcon(team.department)}
           </div>
           <div>
-            <h1 style={{ fontSize: '32px', fontWeight: 800, margin: 0, letterSpacing: '-0.5px', textAlign: 'left', background: 'linear-gradient(135deg, #ffffff 0%, #a0aec0 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <h1 className="team-hero-title">
               {team.name}
             </h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', textAlign: 'left', marginTop: '4px' }}>
+            <p className="team-hero-meta">
               Strategic Segment: <strong>{team.department}</strong> | Leader: <strong>{team.leader}</strong>
             </p>
           </div>
         </div>
 
         <div style={{ display: 'flex', gap: '12px' }}>
-          <div className="status-badge" style={{
+          <div className="status-badge team-hero-status" style={{
             background: team.alignmentScore >= 80 ? 'var(--status-good-bg)' : team.alignmentScore >= 60 ? 'var(--status-at-risk-bg)' : 'var(--status-critical-bg)',
             color: getStatusColor(team.alignmentScore),
             border: `1px solid ${team.alignmentScore >= 80 ? 'rgba(76, 175, 80, 0.2)' : team.alignmentScore >= 60 ? 'rgba(255, 193, 7, 0.2)' : 'rgba(244, 67, 54, 0.2)'}`,
@@ -80,28 +80,22 @@ const TeamHero = ({ team = {} }) => {
 
       </div>
 
-      <div className="team-hero-metrics" style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '16px',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
-        paddingTop: '20px'
-      }}>
+      <div className="team-hero-metrics">
         <div className="hero-metric-item">
-          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Alignment Score</span>
-          <span style={{ fontSize: '28px', fontWeight: 800, color: getStatusColor(team.alignmentScore) }}>{team.alignmentScore}%</span>
+          <span className="hero-metric-label">Alignment Score</span>
+          <span className="hero-metric-value" style={{ color: getStatusColor(team.alignmentScore) }}>{team.alignmentScore}%</span>
         </div>
         <div className="hero-metric-item">
-          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Strategy Comprehension</span>
-          <span style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)' }}>{team.understanding}%</span>
+          <span className="hero-metric-label">Strategy Comprehension</span>
+          <span className="hero-metric-value">{team.understanding}%</span>
         </div>
         <div className="hero-metric-item">
-          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Project Velocity</span>
-          <span style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)' }}>{team.projectVelocity}%</span>
+          <span className="hero-metric-label">Project Velocity</span>
+          <span className="hero-metric-value">{team.projectVelocity}%</span>
         </div>
         <div className="hero-metric-item">
-          <span style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Team Members</span>
-          <span style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text-primary)' }}>{team.members}</span>
+          <span className="hero-metric-label">Team Members</span>
+          <span className="hero-metric-value">{team.members}</span>
         </div>
       </div>
     </div>

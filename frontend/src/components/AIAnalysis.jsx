@@ -17,7 +17,7 @@ const AIAnalysis = ({
     : ['Minor keyword mismatch in roadmap notes']);
 
   return (
-    <div className="glass-card" style={{ flex: 1 }}>
+    <div className="glass-card diagnostics-card" style={{ flex: 1 }}>
       <div className="section-title-bar">
         <h2 className="section-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#00c6ff' }}>
@@ -36,8 +36,9 @@ const AIAnalysis = ({
         <div>
           <span style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'block', marginBottom: '8px' }}>Detected Drift Signals:</span>
           {driftSignals.map((sig, idx) => (
-            <div 
+            <div
               key={idx} 
+              className="drift-signal"
               style={{ 
                 background: 'rgba(244, 67, 54, 0.05)', 
                 border: '1px solid rgba(244, 67, 54, 0.1)', 
@@ -58,7 +59,7 @@ const AIAnalysis = ({
         </div>
 
         {/* Gemini Interactive Form */}
-        <div style={{ background: 'rgba(255,255,255,0.01)', border: '1px dashed rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', marginTop: '8px' }}>
+        <div className="diagnostic-form">
           <span style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--text-primary)', display: 'block', marginBottom: '10px' }}>
             Test Strategy Alignment (Gemini Model)
           </span>

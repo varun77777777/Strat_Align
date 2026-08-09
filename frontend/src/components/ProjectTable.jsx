@@ -21,7 +21,7 @@ const ProjectTable = ({ projects = [] }) => {
   };
 
   return (
-    <div className="glass-card" style={{ flex: 1.5 }}>
+    <div className="glass-card project-table-card" style={{ flex: 1.5 }}>
       <div className="section-title-bar">
         <h2 className="section-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#667eea' }}>
@@ -36,7 +36,7 @@ const ProjectTable = ({ projects = [] }) => {
       </div>
 
       <div style={{ overflowX: 'auto', marginTop: '16px' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '400px' }}>
+        <table className="project-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '400px' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <th style={{ padding: '12px 8px', fontSize: '12px', color: 'var(--text-secondary)' }}>Project Initiative</th>

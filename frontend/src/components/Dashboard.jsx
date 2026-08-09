@@ -47,6 +47,52 @@ const Toast = ({ message, type, onClose }) => (
   </div>
 );
 
+const WorkspaceSidebar = ({ activeSection, onNavigate }) => (
+  <aside className="workspace-sidebar" aria-label="Primary navigation">
+    <div className="brand-mark"><span>◈</span> StratAlign</div>
+    <p className="workspace-label">WORKSPACE</p>
+    <nav
+      className="workspace-nav"
+      data-active-section={activeSection}
+      onClick={(event) => {
+        const link = event.target.closest('a[href^="#"]');
+        const sectionId = link?.getAttribute('href')?.slice(1);
+        if (sectionId) onNavigate(sectionId);
+      }}
+    >
+      <a className="nav-item active" href="#overview"><span>⌂</span> Overview</a>
+      <a className="nav-item" href="#teams"><span>◫</span> Teams</a>
+      <a className="nav-item" href="#drift"><span>⌁</span> Drift radar</a>
+      <a className="nav-item" href="#forecasts"><span>◔</span> Forecasts</a>
+      <a className="nav-item" href="#interventions"><span>✦</span> Interventions</a>
+    </nav>
+    <div className="sidebar-help">
+      <span>✦</span>
+      <strong>Alignment pulse</strong>
+      <p>Check high-risk teams and decide what to correct next.</p>
+    </div>
+    <div className="sidebar-user"><span className="avatar">SL</span><span><strong>Strategy Lead</strong><small>Executive workspace</small></span></div>
+  </aside>
+);
+
+// eslint-disable-next-line no-unused-vars
+const WorkspaceHeader = ({ lastUpdated, exporting, onExport }) => (
+  <header className="workspace-header">
+    <div>
+      <p className="eyebrow">STRATEGY EXECUTION</p>
+      <h1>Hello, Courtney</h1>
+      <p className="header-subtitle">Here's how your strategic priorities are moving today.</p>
+    </div>
+    <div className="header-actions">
+      <span className="updated-label">Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+      <button className="export-btn secondary-action" onClick={onExport} disabled={exporting} aria-label="Download PDF report">
+        {exporting ? 'Preparing…' : 'Export report'}
+      </button>
+      <div className="profile-circle">C</div>
+    </div>
+  </header>
+);
+
 // ─── Dashboard ─────────────────────────────────────────────────────────────────
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -66,6 +112,7 @@ const Dashboard = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [exporting, setExporting] = useState(false);
   const [toast, setToast] = useState(null);
+  const [activeSection, setActiveSection] = useState('overview');
   const [appliedSmartIds, setAppliedSmartIds] = useState(() => {
     try {
       const stored = localStorage.getItem('applied_smart_ids');
@@ -184,10 +231,16 @@ const Dashboard = () => {
     navigate(`/team/${team.id || team._id}`);
   };
 
+  const handleWorkspaceNavigation = (sectionId) => {
+    setActiveSection(sectionId);
+  };
+
   // ── Loading state ──────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div>
+      <div className="dashboard-shell">
+        <WorkspaceSidebar activeSection={activeSection} onNavigate={handleWorkspaceNavigation} />
+        <main className="workspace-main">
         <nav className="glass-navbar">
           <div className="nav-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -206,13 +259,16 @@ const Dashboard = () => {
           <div className="spinner" />
           <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Loading strategic alignment data…</p>
         </div>
+        </main>
       </div>
     );
   }
 
   // ── Main render ────────────────────────────────────────────────────────────
   return (
-    <div ref={dashboardRef}>
+    <div className="dashboard-shell" ref={dashboardRef}>
+      <WorkspaceSidebar activeSection={activeSection} onNavigate={handleWorkspaceNavigation} />
+      <main className="workspace-main">
       {/* Glass Navbar */}
       <nav className="glass-navbar">
         <div className="nav-logo">
@@ -242,6 +298,18 @@ const Dashboard = () => {
         </div>
       </nav>
 
+      <section className="executive-intro" id="overview">
+        <div>
+          <p className="eyebrow">STRATEGY EXECUTION</p>
+          <h1>Good morning, Courtney</h1>
+          <p>See where execution is aligned, where it is drifting, and what to correct next.</p>
+        </div>
+        <div className="intro-callout">
+          <span>Executive focus</span>
+          <strong>Protect the highest-value initiatives</strong>
+        </div>
+      </section>
+
       {/* Error Banner */}
       {error && (
         <div className="error-banner">
@@ -270,29 +338,38 @@ const Dashboard = () => {
       <div className="dashboard-layout">
         {/* Main Column */}
         <div className="main-column">
-          <TeamHeatmap teams={teams} onTeamClick={handleTeamClick} />
-          <DriftIntelligence
-            driftData={driftData}
-            impactModel={impactModel}
-            onAutoCorrect={handleAutoCorrect}
-            correctingTeamId={correctingTeamId}
-          />
-          <TrendChart trendData={trendData} />
-          <HistogramChart riskData={predictions} />
-          <RiskForecast predictions={predictions} />
+          <section id="teams" className="workspace-section">
+            <TeamHeatmap teams={teams} onTeamClick={handleTeamClick} />
+          </section>
+          <section id="drift" className="workspace-section">
+            <DriftIntelligence
+              driftData={driftData}
+              impactModel={impactModel}
+              onAutoCorrect={handleAutoCorrect}
+              correctingTeamId={correctingTeamId}
+            />
+          </section>
+          <section id="forecasts" className="workspace-section workspace-section-stack">
+            <TrendChart trendData={trendData} />
+            <HistogramChart riskData={predictions} />
+            <RiskForecast predictions={predictions} />
+          </section>
         </div>
 
         {/* Side Column */}
         <div className="side-column">
-          <RecommendationsPanel
-            recommendations={recommendations}
-            teams={teams}
-            onApplyRecommendation={handleApplyRecommendation}
-            applyingId={applyingId}
-            appliedSmartIds={appliedSmartIds}
-          />
+          <section id="interventions" className="workspace-section">
+            <RecommendationsPanel
+              recommendations={recommendations}
+              teams={teams}
+              onApplyRecommendation={handleApplyRecommendation}
+              applyingId={applyingId}
+              appliedSmartIds={appliedSmartIds}
+            />
+          </section>
         </div>
       </div>
+      </main>
     </div>
   );
 };

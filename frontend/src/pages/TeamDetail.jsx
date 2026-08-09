@@ -227,11 +227,11 @@ const TeamDetail = () => {
   }
 
   return (
-    <div style={{ animation: 'fadeIn 0.3s ease', width: '100%' }}>
+    <div className="team-detail-page">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div style={{
+        <div className="team-toast" style={{
           position: 'fixed',
           bottom: '30px',
           right: '30px',
@@ -290,9 +290,10 @@ const TeamDetail = () => {
       <TeamHero team={team} />
 
       {/* View Tabs */}
-      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px', marginBottom: '24px' }}>
+      <div className="team-tabs">
         <button 
           onClick={() => setActiveTab('performance')} 
+          className={`team-tab ${activeTab === 'performance' ? 'active' : ''}`}
           style={{
             background: activeTab === 'performance' ? 'var(--primary-gradient)' : 'transparent',
             border: 'none',
@@ -309,6 +310,7 @@ const TeamDetail = () => {
         </button>
         <button 
           onClick={() => setActiveTab('sentiment')} 
+          className={`team-tab ${activeTab === 'sentiment' ? 'active' : ''}`}
           style={{
             background: activeTab === 'sentiment' ? 'var(--primary-gradient)' : 'transparent',
             border: 'none',
@@ -325,6 +327,7 @@ const TeamDetail = () => {
         </button>
         <button 
           onClick={() => setActiveTab('technical')} 
+          className={`team-tab ${activeTab === 'technical' ? 'active' : ''}`}
           style={{
             background: activeTab === 'technical' ? 'var(--primary-gradient)' : 'transparent',
             border: 'none',
